@@ -3,19 +3,15 @@ CF = gcc -Wall -g -std=c99 -lm
 default: all 
 
 all:
-	$(CF) Q0.c -o Q0
-	$(CF) Q1.c -o Q1
+	$(CF) q0.c -o q0
+	$(CF) q1.c -o q1
 
-Q0: Q0.c
-	$(CF) Q0.c -o Q0
+q0: q0.c
+	$(CF) q0.c -o q0
 
-Q1: Q1.c
-	$(CF) Q1.c -o Q1 
+q1: q1.c
+	$(CF) q1.c -o q1 
 
 clean:
-	rm *.o
-
-cleanall: clean
-	rm a1 
-
+	rm *.o *.exe
 

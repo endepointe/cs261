@@ -1,54 +1,80 @@
 /*******
  * CS261: Assignment 1 - Q.1
  * Name: Alvin Johns
- * Date: 01/12/20
- * Solution Desc: Demonstration file to display how pointers work in C
+ * Date: 01/13/20
+ * Solution Desc: Demonstration file to display how create and
+ * 	manipulate a block of memory 
  * */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <time.h>
 
-void fooA(int* iptr) {
+struct student {
+	int id;
+	int score;
+};
 
-	/* Print the value and address of the integer pointed to by iptr*/
+struct student* allocate() {
+	return (struct student*)malloc(10 * sizeof(struct student));
+};
 
-	printf("Value of iptr: %d\n", *iptr);
-	printf("Address of iptr: %p\n", &iptr);
+void generate(struct student* students) {
+	srand(time(NULL));	
 
-	/* Increment the value of the integer pointed to by iptr by 5 */
+	for (int i = 0; i < 10; ++i) {
+		students[i].id = i + 1;
+		students[i].score = rand() % 101;
+	}
+}
 
-	*iptr += 5;
-	printf("Value of iptr incremented by 5: %d\n", *iptr);
+void output(struct student* students) {
+	
+	for (int i = 0; i < 10; ++i) {
+		printf("ID:%d Score:%d\n", students[i].id, students[i].score);
+	}
+}
 
-	/* Print the address of the iptr itself */
+void summary(struct student* students) {
+	int min = students[0].score;
+	int max = students[0].score;
+	int avg = 0;
 
-	printf("Address of iptr: %p\n", iptr);
+	for (int i = 0; i < 10; ++i) {
+		if (students[i].score <= min) {
+			min = students[i].score;
+		}
+
+		if (students[i].score >= max) {
+			max = students[i].score;
+		}
+		avg += students[i].score;
+	}
+
+	avg /= 10;
+
+	printf("min score: %d\n", min);
+	printf("max score: %d\n", max);
+	printf("average score: %d\n", avg);
 
 }
 
-void fooB(int* jptr) {
-	/* Print the value and address of the integer pointed to by jptr */
-	
-	printf("Value of jptr: %d\n", *jptr);
-	printf("Address of jptr: %p\n", &jptr);
-
-	/* Decrement the address by 1 pointed to by jptr using jptr */
-
-	jptr -= -1;
-
-	/* Print the address of jptr itself */
-	printf("Address of jptr decremented by 1: %p\n", jptr);
-
+void deallocate(struct student* stud) {
+	free(stud);
+	stud = 0;
 }
 
 int main(int some, char ** thing) {
+	
+	struct student *class = allocate();	
 
-	int x = 10;
-	int *xptr = &x;
+	printf("student mem: %p\n", class);
 
-	fooA(xptr);
-	fooB(xptr);
+	generate(class);
+	output(class);
+	summary(class);
+	deallocate(class);
 
 	return 0;
 }

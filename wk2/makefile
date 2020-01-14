@@ -1,12 +1,16 @@
-CF = gcc -Wall -g -std=c99 
+CF = gcc -Wall -g -std=c99 -lm
 
-default: a1 
+default: all 
 
-a1: q0.o
-	$(CF) q0.o -o a1 -lm
+all:
+	$(CF) Q0.c -o Q0
+	$(CF) Q1.c -o Q1
 
-q0.o: q0.c
-	$(CF) -c q0.c
+Q0: Q0.c
+	$(CF) Q0.c -o Q0
+
+Q1: Q1.c
+	$(CF) Q1.c -o Q1 
 
 clean:
 	rm *.o

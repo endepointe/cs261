@@ -21,5 +21,9 @@ q3: q3.c
 	$(CF) q3.c -o q3 
 
 clean:
-	rm *.o 
+	rm *.o *.exe
+
+#cleanall: clean
+#	rm all
+
 

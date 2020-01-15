@@ -12,11 +12,14 @@
 int foo(int* a, int* b, int c) {
 
 	printf("a: %p, b: %p\n", a, b);
+
 	int *temp = a;
 	a = b;
 	b = temp;
-	printf("a: %p, b: %p\n", a, b);
+	temp = NULL;
 	c -= 1;
+
+	printf("a: %p, b: %p\n", a, b);
 
 	return c;
 }
@@ -30,7 +33,7 @@ int main(int some, char ** thing) {
 	int z = rand() % 11;
 
 	// print the addresses
-	printf("addresses of x and y:\n%p %p", &x, &y);
+	printf("addresses of x and y: %p %p\n", &x, &y);
 
 	// print the values
 	printf("x: %d, y: %d, z: %d\n", x, y, z);
@@ -39,13 +42,13 @@ int main(int some, char ** thing) {
 	z = foo(&x, &y, z);
 
 	// print the addresses
-	printf("addresses of x and y:\n%p %p", &x, &y);
+	printf("addresses of x and y: %p %p\n", &x, &y);
 
 	// print the values
 	printf("x: %d, y: %d, z: %d\n", x, y, z);
 
 	// print the value returned by foo
-	printf("foo(..): %d", foo(&x, &y, z));
+	printf("foo(..): %d\n", foo(&x, &y, z));
 
 	return 0;
 }

@@ -20,13 +20,48 @@ struct student* allocate() {
 	return (struct student*)malloc(10 * sizeof(struct student));
 };
 
+void swap (int* a, int*  b) {
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
 void generate(struct student* students) {
+
 	srand(time(NULL));	
+
+	//bool flag = false;
+	int _maxScore = 15;
+	//int *scores = malloc(_maxScore * sizeof(int));
+	//int r = 0;
+
 
 	for (int i = 0; i < 10; ++i) {
 		students[i].id = i + 1;
-		students[i].score = rand() % 101;
+		students[i].score = rand() % _maxScore + 1;
+		/*
+		while (flag == false) {
+			r = rand() % _maxScore + 1;
+			for (int i = 0; i < 10; ++i) {
+				if (students[i].score != r) {
+					student[i].score = r;
+				}
+			}
+		}
+		*/
 	}
+/*
+	while (flag == false) {
+		r = rand() % _maxScore + 1;
+		for (int i = 0; i < 10; ++i) {
+			if (students[i].score != r) {
+				student[i].score = r;
+				flag
+			}
+			else
+		}
+	}
+	*/
 }
 
 void output(struct student* students) {
@@ -61,8 +96,12 @@ void summary(struct student* students) {
 }
 
 void deallocate(struct student* stud) {
-	free(stud);
-	stud = 0;
+
+	if (stud != NULL) {
+		free(stud);
+		stud = NULL;
+	}
+
 }
 
 int main(int some, char ** thing) {

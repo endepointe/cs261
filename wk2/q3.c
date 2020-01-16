@@ -15,18 +15,14 @@
 
 char toUpperCase(char ch) {
 
-	if ( (ch > 96) && (ch < 123) ) {
-		ch -= 32;
-	}	
+	if ( (ch > 96) && (ch < 123) ) { ch -= 32; }	
 
 	return ch;
 }
 
 char toLowerCase(char ch) {
 
-	if ( (ch > 64) && (ch < 91) ) {
-		ch += 32;
-	}
+	if ( (ch > 64) && (ch < 91) ) { ch += 32; }
 
 	return ch;
 }
@@ -35,75 +31,60 @@ int stringLength(char s[]) {
 
 	int length = 0;
 
-	while (s[length] != '\0') {
-		length++;
-	}
+	while (s[length] != '\0') { length++; }
 
 	return length;
 }
 
 void camelCase(char* word) {
 
-	/* if the index of the word is lowercase and it is the first
-	 * index of the word, keep the index a lower case.
-	 *
-	 * if the index of the word is not the first letter of the 
-	 * word and the letter follows and underscore, ignore the 
-	 * underscore and convert the character to uppercase
-	 */
-
 	int len = stringLength(word);
 	int count = 0;
+	char temp[len + 1];
+
+	printf("The length of the string is %d\n", len);
 
 	for (int i = 0; i < len; ++i) {
-		if ( (word[i] < 65'_') && (word[i] > 90) 
-		  || (word[i] < 97') && (word[i] > 90)
-		  || (word[i] < 65'_') && (word[i] > 90) ) {
-			len++;
-			word[i] = word[i+1];
-			i++;
-		}		
+		temp[i] = word[i];
+		if (word[i] == '_') {		
+			count++;
+		}
 	}
 
-	// _something should converto to something
-	// set pos n to pos n + 1
-	// to prevent duplicates after the removal of the 
-	// underscore, like ssomething, move n + 1 to the
-	// position of i and decrement the length of the
-	// string. 
-	//
-	// This may be an opportunity to create a recursive function.
-	// but how...
-
-	printf("underscore should be removed ... %s\n", word);
+	printf("%d underscores should be removed ... %s\n", count, temp);
 }
 
 int main(int some, char ** thing) {
 
-	//char a;
 	char str[256];
 
-	/*
-	printf("Please enter a lowercase character value: ");
-	scanf("%c", &a);
-
-	a = toUpperCase(a);
-
-	printf("a should be uppercase - %c\n", a);
-
-	printf("Please enter a string if characters: ");
-
-	scanf("%s", str);
-
-	printf("The length of characters entered is %d\n", stringLength(str));
-	*/
-
-	printf("Please enter a string of characters(with undercore): ");
+	printf("Enter a string of letters: ");
 
 	scanf("%s", str);
 
 	camelCase(str);
 
+/*
+	printf("Enter a string of lowercase letters: ");
+
+	scanf("%s", str);
+
+	for (int i = 0; i < stringLength(str); ++i) {
+		str[i] = toUpperCase(str[i]);
+	}
+
+	printf("After uppercase conversion: %s\n", str);
+
+	printf("Enter a string of uppercase letters: ");
+
+	scanf("%s", strl);
+
+	for (int i = 0; i < stringLength(strl); ++i) {
+		strl[i] = toLowerCase(strl[i]);
+	}
+
+	printf("After lowercase conversion: %s\n", strl);
+*/
 
 	return 0;
 }

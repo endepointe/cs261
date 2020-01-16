@@ -36,31 +36,47 @@ int stringLength(char s[]) {
 	return length;
 }
 
+/* lower case is from 97 to 122
+ * upper case is from 65 to 90
+ */
+
 void camelCase(char* word) {
 
 	int len = stringLength(word);
 	int count = 0;
 	char temp[len + 1];
 
-	printf("The length of the string is %d\n", len);
+	printf("Before checking, length of the string is %d\n", len);
+
+	if (word[0] == '_') {
+		count++;
+		len--;
+		for (int i = 0; i < len; ++i) {
+			if (word[i] == '\0') {
+				break;
+			}
+			word[i] =  word[i+1];
+		}
+		camelCase(word);
+	}
 
 	for (int i = 0; i < len; ++i) {
 		temp[i] = word[i];
-		if (word[i] == '_') {		
-			count++;
-		}
+		//printf("%c is at index %d \n", temp[i], i);
 	}
 
 	printf("%d underscores should be removed ... %s\n", count, temp);
+	printf("The string is %d chars long\n", len);
 }
 
 int main(int some, char ** thing) {
 
-	char str[256];
+	//char str[256];
+	char str[256] = "_four";
 
 	printf("Enter a string of letters: ");
 
-	scanf("%s", str);
+	//fgets(str, 256, stdin);
 
 	camelCase(str);
 

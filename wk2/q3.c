@@ -54,6 +54,10 @@ int isAlphaChar(char ch) {
 
 	int result = -1;
 
+	if ( (ch > 64)  && (ch < 91) ) {
+		result = 1;
+	} 
+	
 	if ( (ch > 96)  && (ch < 123) ) {
 		result = 1;
 	}
@@ -65,35 +69,43 @@ void camelCase(char* word) {
 	
 	int length = stringLength(word);
 	int pos = 0;
-	int newSize = 0;
-	char str[length+1];
-	char *temp = NULL;
-	//char *temp2;
-	//char c;
+	int index = 0;
+	char *str = malloc( (length+1) * sizeof(char));
 
 	for (int i = 0; word[i] != '\0'; i++) {
 		str[i] = toLowerCase(word[i]);	
+		// if the char at i is an underscore and 
+		// 	the char at i+1 is between 97-122
+		//	then convert char at i+1 to an uppercase.
+		//	increment i by 2.
+		
+		if ((str[i] == '_') && ((str[i+1] > 96) && (str[i+1] < 123))) {
+			str[i+1] = toUpperCase(str[i+1]);
+			i = i + 2;
+		}
 	}
 
 	while (pos < length) {
 		if (isAlphaChar(str[pos]) > 0) {
-			newSize++;
 			printf("%c position %i\n", str[pos], pos);	
-			if (temp != NULL) {
-				free(temp);
-			} else {
-				temp = malloc((newSize + 1) * sizeof(char));
-				for (int i = 0; i < newSize; i++) {
-					temp[i] = str[pos];
-					// stopped here. freeing memory 
-					// and reallocating with new size
-				}
-			}
+			str[index] = str[pos];
+			index++;		
 		}	
 		pos++;
 	}
 
-	printf("The string entered is: %s\n", temp);
+	char final[index];
+
+	for (int i = 0; i < index; ++i) {
+		final[i] = str[i];
+	}
+	
+	final[index] = '\0';
+	free(str);
+
+	printf("The string entered is: %s\n", str);
+	printf("pos: %i , index: %i\n", pos, index);
+	printf("final: %s\n", final);
 }
 
 

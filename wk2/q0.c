@@ -13,20 +13,15 @@
 void fooA(int* iptr) {
 
 	/* Print the value and address of the integer pointed to by iptr*/
-
-	printf("Value of the integer pointed to by iptr: %d\n", *iptr);
-	printf("Address that iptr points to: %p\n", &iptr);
+	printf("Value of the integer pointed to by iptr: %d\n\n", *iptr);
+	printf("Address that iptr points to: %p\n\n", &iptr);
 
 	/* Increment the value of the integer pointed to by iptr by 5 */
-
 	*iptr += 5;
-	printf("Value that iptr points to, incremented by 5: %d\n", *iptr);
+	printf("Value that iptr points to, incremented by 5: %d\n\n", *iptr);
 
 	/* Print the address of the iptr itself */
-
-	printf("Address of iptr: %p\n", iptr);
-
-	printf("\n\n");
+	printf("Address of iptr: %p\n\n", iptr);
 }
 
 

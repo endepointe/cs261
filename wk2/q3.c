@@ -36,16 +36,6 @@ int stringLength(char s[]) {
 	return length;
 }
 
-/* Todo: 
- * 	- get the length of string
- * 	- convert the entire string to lowercase
- * 	- check the first character of current string 
- * 		to see if it is an underscore
- * 	- if it is an underscore, call a function to 
- * 		create and return a new string to be parsed 
- * 		by camelCase(...) again. 
- * */
-
 int isAlphaChar(char ch) {
 
 	int result = -1;
@@ -61,32 +51,41 @@ int isAlphaChar(char ch) {
 	return result;
 }
 
+// camelCase contains 2 loops for O(n) time complexity where n is the
+// length of the word.
+//
 void camelCase(char* word) {
 	
 	int length = stringLength(word);
-	// pos is used for memory of alphetical char
+
+	// pos is used for location of alphetical char
 	int pos = 0;
+
 	// index is used for the final assignment of camelCase chars
 	int index = 0;
-	// str is dynamically allocated and free after its use of 
+
+	// tempStr is dynamically allocated and freed after its use of 
 	// 	final string seen below
-	char *str = malloc( (length+1) * sizeof(char));
+	char *tempStr = malloc( (length+1) * sizeof(char));
 
 	// get the entire length of initial, unformatted string
+	// and set to lowercase for simplicity
 	for (int i = 0; word[i] != '\0'; i++) {
-		str[i] = toLowerCase(word[i]);	
+		tempStr[i] = toLowerCase(word[i]);	
 
-		// set any chars at index > 0 to _ for future parsing
+		// set any chars at index > 0 that are not an _ or char
+		// in the alphabet to _ for future parsing
 		if (i > 0) {
-			if ((str[i-1] != '_') && (isAlphaChar(str[i-1]) < 0)) {
-				str[i-1] = '_';
+			if((tempStr[i-1]!='_')&&(isAlphaChar(tempStr[i-1])<0)){
+				tempStr[i-1] = '_';
 			}
 		}
 
-		// once parsed to _, convert char at i+1 to upper case
-		if ( str[i-1] == '_') {
-			if ( isAlphaChar(str[i]) > 0 ) {
-				str[i] = toUpperCase(str[i]);
+		// once parsed to _, convert char at i to upper case by 
+		// checking that the previous char is an underscore.
+		if (tempStr[i-1] == '_') {
+			if ( isAlphaChar(tempStr[i]) > 0 ) {
+				tempStr[i] = toUpperCase(tempStr[i]);
 			}
 		}
 	}
@@ -95,41 +94,50 @@ void camelCase(char* word) {
 	// final parsing of all alphabetical chars 
 	// 	using index and pos accordingly
 	while (pos < length) {
-		if (isAlphaChar(str[pos]) > 0) {
-			str[index] = str[pos];
+		if (isAlphaChar(tempStr[pos]) > 0) {
+			tempStr[index] = tempStr[pos];
 			index++;		
 		}	
 		pos++;
 	}
 
-	// Possibly could have used malloc here, which I did prior
-	// 	to assigning a static array. 
-	// 	However, doing so produced same result.
-	char final[index];
+	char *final = malloc((index+1) * sizeof(char));
 
 	for (int i = 0; i < index; ++i) {
-		final[i] = str[i];
+		final[i] = tempStr[i];
 	}
 	
 	final[index] = '\0';
 	final[0] = toLowerCase(final[0]);
 
 	// free unneeded array block
-	free(str);
+	free(tempStr);
 
-	printf("final: %s\n", final);
+	printf("camelCase(...) prints: %s\n", final);
 
+	// Until camelCase is supposed to return the char*, 
+	// free the final array block.
+	free(final);
 }
 
 
 int main(int some, char ** thing) {
 
-	char str[256];
-	//char str[256] = "__FOUR_FIVE sIX SeveN_@_Eight_$NiNe";
+	// ***********	
+	// For quick checking, uncomment and comment apporpriate lines
+	// ***********	
 
-	printf("Enter a string of letters: \n");
+	///*	
+	char str[256] = "_random_ _word_provided@$ptr*4con_ran dom word example word ANOTHER_Word";
+	//*/
+
+	/*
+	char str[256];
+
+	printf("Enter a string of letters: ");
 
 	fgets(str, 256, stdin);
+	*/
 
 	camelCase(str);
 

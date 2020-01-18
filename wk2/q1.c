@@ -108,7 +108,7 @@ int main(int some, char ** thing) {
 	
 	struct student *class = allocate();	
 
-	printf("student mem: %p\n", class);
+	//printf("student mem: %p\n", class);
 
 	generate(class);
 	output(class);

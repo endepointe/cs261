@@ -4,14 +4,14 @@
  * Date: 01/13/20
  * Solution Desc: Demonstrate how to manipulate a string of alphanumeric
  * 	letters to form a camelCase output
+ *
+ * 	lower case is from 97 to 122
+ * 	upper case is from 65 to 90
+ *
  * */
 
 #include <stdio.h>
 #include <stdlib.h>
-
-/* lower case is from 97 to 122
- * upper case is from 65 to 90
- */
 
 char toUpperCase(char ch) {
 
@@ -35,10 +35,6 @@ int stringLength(char s[]) {
 
 	return length;
 }
-
-/* lower case is from 97 to 122
- * upper case is from 65 to 90
- */
 
 /* Todo: 
  * 	- get the length of string
@@ -68,32 +64,47 @@ int isAlphaChar(char ch) {
 void camelCase(char* word) {
 	
 	int length = stringLength(word);
+	// pos is used for memory of alphetical char
 	int pos = 0;
+	// index is used for the final assignment of camelCase chars
 	int index = 0;
+	// str is dynamically allocated and free after its use of 
+	// 	final string seen below
 	char *str = malloc( (length+1) * sizeof(char));
 
+	// get the entire length of initial, unformatted string
 	for (int i = 0; word[i] != '\0'; i++) {
 		str[i] = toLowerCase(word[i]);	
-		// if the char at i is an underscore and 
-		// 	the char at i+1 is between 97-122
-		//	then convert char at i+1 to an uppercase.
-		//	increment i by 2.
-		
-		if ((str[i] == '_') && ((str[i+1] > 96) && (str[i+1] < 123))) {
-			str[i+1] = toUpperCase(str[i+1]);
-			i = i + 2;
+
+		// set any chars at index > 0 to _ for future parsing
+		if (i > 0) {
+			if ((str[i-1] != '_') && (isAlphaChar(str[i-1]) < 0)) {
+				str[i-1] = '_';
+			}
+		}
+
+		// once parsed to _, convert char at i+1 to upper case
+		if ( str[i-1] == '_') {
+			if ( isAlphaChar(str[i]) > 0 ) {
+				str[i] = toUpperCase(str[i]);
+			}
 		}
 	}
 
+
+	// final parsing of all alphabetical chars 
+	// 	using index and pos accordingly
 	while (pos < length) {
 		if (isAlphaChar(str[pos]) > 0) {
-			printf("%c position %i\n", str[pos], pos);	
 			str[index] = str[pos];
 			index++;		
 		}	
 		pos++;
 	}
 
+	// Possibly could have used malloc here, which I did prior
+	// 	to assigning a static array. 
+	// 	However, doing so produced same result.
 	char final[index];
 
 	for (int i = 0; i < index; ++i) {
@@ -101,22 +112,24 @@ void camelCase(char* word) {
 	}
 	
 	final[index] = '\0';
+	final[0] = toLowerCase(final[0]);
+
+	// free unneeded array block
 	free(str);
 
-	printf("The string entered is: %s\n", str);
-	printf("pos: %i , index: %i\n", pos, index);
 	printf("final: %s\n", final);
+
 }
 
 
 int main(int some, char ** thing) {
 
-	//char str[256];
-	char str[256] = "__FOUR_FIVE sIX SeveN_@_Eight_$NiNe";
+	char str[256];
+	//char str[256] = "__FOUR_FIVE sIX SeveN_@_Eight_$NiNe";
 
 	printf("Enter a string of letters: \n");
 
-	//fgets(str, 256, stdin);
+	fgets(str, 256, stdin);
 
 	camelCase(str);
 

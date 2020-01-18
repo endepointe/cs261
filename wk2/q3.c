@@ -40,67 +40,73 @@ int stringLength(char s[]) {
  * upper case is from 65 to 90
  */
 
-void camelCase(char* word) {
+/* Todo: 
+ * 	- get the length of string
+ * 	- convert the entire string to lowercase
+ * 	- check the first character of current string 
+ * 		to see if it is an underscore
+ * 	- if it is an underscore, call a function to 
+ * 		create and return a new string to be parsed 
+ * 		by camelCase(...) again. 
+ * */
 
-	int len = stringLength(word);
-	int count = 0;
-	char temp[len + 1];
+int isAlphaChar(char ch) {
 
-	printf("Before checking, length of the string is %d\n", len);
+	int result = -1;
 
-	if (word[0] == '_') {
-		count++;
-		len--;
-		for (int i = 0; i < len; ++i) {
-			if (word[i] == '\0') {
-				break;
-			}
-			word[i] =  word[i+1];
-		}
-		camelCase(word);
+	if ( (ch > 96)  && (ch < 123) ) {
+		result = 1;
 	}
 
-	for (int i = 0; i < len; ++i) {
-		temp[i] = word[i];
-		//printf("%c is at index %d \n", temp[i], i);
-	}
-
-	printf("%d underscores should be removed ... %s\n", count, temp);
-	printf("The string is %d chars long\n", len);
+	return result;
 }
+
+void camelCase(char* word) {
+	
+	int length = stringLength(word);
+	int pos = 0;
+	int newSize = 0;
+	char str[length+1];
+	char *temp = NULL;
+	//char *temp2;
+	//char c;
+
+	for (int i = 0; word[i] != '\0'; i++) {
+		str[i] = toLowerCase(word[i]);	
+	}
+
+	while (pos < length) {
+		if (isAlphaChar(str[pos]) > 0) {
+			newSize++;
+			printf("%c position %i\n", str[pos], pos);	
+			if (temp != NULL) {
+				free(temp);
+			} else {
+				temp = malloc((newSize + 1) * sizeof(char));
+				for (int i = 0; i < newSize; i++) {
+					temp[i] = str[pos];
+					// stopped here. freeing memory 
+					// and reallocating with new size
+				}
+			}
+		}	
+		pos++;
+	}
+
+	printf("The string entered is: %s\n", temp);
+}
+
 
 int main(int some, char ** thing) {
 
 	//char str[256];
-	char str[256] = "_four";
+	char str[256] = "__FOUR_FIVE sIX SeveN_@_Eight_$NiNe";
 
-	printf("Enter a string of letters: ");
+	printf("Enter a string of letters: \n");
 
 	//fgets(str, 256, stdin);
 
 	camelCase(str);
-
-/*
-	printf("Enter a string of lowercase letters: ");
-
-	scanf("%s", str);
-
-	for (int i = 0; i < stringLength(str); ++i) {
-		str[i] = toUpperCase(str[i]);
-	}
-
-	printf("After uppercase conversion: %s\n", str);
-
-	printf("Enter a string of uppercase letters: ");
-
-	scanf("%s", strl);
-
-	for (int i = 0; i < stringLength(strl); ++i) {
-		strl[i] = toLowerCase(strl[i]);
-	}
-
-	printf("After lowercase conversion: %s\n", strl);
-*/
 
 	return 0;
 }

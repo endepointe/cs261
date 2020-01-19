@@ -127,17 +127,17 @@ int main(int some, char ** thing) {
 	// For quick checking, uncomment and comment apporpriate lines
 	// ***********	
 
-	///*	
+	/*	
 	char str[256] = "_random_ _word_provided@$ptr*4con_ran dom word example word ANOTHER_Word";
-	//*/
+	*/
 
-	/*
+	///*
 	char str[256];
 
 	printf("Enter a string of letters: ");
 
 	fgets(str, 256, stdin);
-	*/
+	//*/
 
 	camelCase(str);
 

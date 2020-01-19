@@ -18,50 +18,32 @@ struct student {
 
 struct student* allocate() {
 	return (struct student*)malloc(10 * sizeof(struct student));
-};
-
-void swap (int* a, int*  b) {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
 }
 
 void generate(struct student* students) {
 
 	srand(time(NULL));	
 
-	//bool flag = false;
-	int _maxScore = 15;
-	//int *scores = malloc(_maxScore * sizeof(int));
-	//int r = 0;
+	int studentCount = 10;
+	int maxScore = 10;
+	int size = maxScore + 1;
+	int *scores = malloc((maxScore+1) * sizeof(int));
+	int score = 0;
+	int id = 0;
 
+	for (int i = 0; i <= maxScore; ++i) {
+		scores[i] = i;	
+	}
 
-	for (int i = 0; i < 10; ++i) {
+	while (size != 0) {
+		score = rand() % maxScore;
+		id = rand() % studentCount + 1;	
+	}
+
+	for (int i = 0; i < studentCount; ++i) {
 		students[i].id = i + 1;
-		students[i].score = rand() % _maxScore + 1;
-		/*
-		while (flag == false) {
-			r = rand() % _maxScore + 1;
-			for (int i = 0; i < 10; ++i) {
-				if (students[i].score != r) {
-					student[i].score = r;
-				}
-			}
-		}
-		*/
+		students[i].score = rand() % maxScore + 1;
 	}
-/*
-	while (flag == false) {
-		r = rand() % _maxScore + 1;
-		for (int i = 0; i < 10; ++i) {
-			if (students[i].score != r) {
-				student[i].score = r;
-				flag
-			}
-			else
-		}
-	}
-	*/
 }
 
 void output(struct student* students) {

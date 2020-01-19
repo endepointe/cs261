@@ -26,7 +26,7 @@ void fooA(int* iptr) {
 	printf("Address of iptr: %p\n\n", iptr);
 	
 	/* Dummy variable, ignore the warning */
-	int c=5;
+	//int c=5;
 }
 
 

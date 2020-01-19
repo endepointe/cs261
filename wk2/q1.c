@@ -20,30 +20,54 @@ struct student* allocate() {
 	return (struct student*)malloc(10 * sizeof(struct student));
 }
 
+void swap(int* a, int* b) {
+	int temp = 0;
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
 void generate(struct student* students) {
 
 	srand(time(NULL));	
 
 	int studentCount = 10;
-	int maxScore = 10;
-	int size = maxScore + 1;
+	int maxScore = 100;
 	int *scores = malloc((maxScore+1) * sizeof(int));
-	int score = 0;
-	int id = 0;
+	int temp;
 
-	for (int i = 0; i <= maxScore; ++i) {
-		scores[i] = i;	
+	// fill in the scores for future randomization
+	for (int i = 0; i <= maxScore; i++) {
+		scores[i] = i;
 	}
 
-	while (size != 0) {
-		score = rand() % maxScore;
-		id = rand() % studentCount + 1;	
-	}
-
+	// fill in the ids for future randomization
 	for (int i = 0; i < studentCount; ++i) {
-		students[i].id = i + 1;
-		students[i].score = rand() % maxScore + 1;
+		students[i].id = i+1;
 	}
+
+	// randomize the student scores (fisher-yates)
+	for (int i = 0; i <= maxScore; i++){
+		temp = rand() % maxScore;
+		swap(&scores[i], &scores[temp]);
+	}
+
+	// randomize the student ids (fisher-yates)
+	// and assign the first [studentCount] random scores
+	for (int i = 0; i < studentCount; i++){
+		temp = rand() % studentCount;
+		swap(&students[i].id, &students[temp].id);
+		students[i].score = scores[i];
+	}
+
+/*
+	for (int i = 0; i < studentCount; ++i) {
+		printf("students[%i].id = %i\n", i, students[i].id);
+		students[i].score = scores[i];
+		printf("students[%i].score = %i\n", i,students[i].score);
+	}
+*/
+	free(scores);
 }
 
 void output(struct student* students) {
@@ -71,9 +95,11 @@ void summary(struct student* students) {
 
 	avg /= 10;
 
-	printf("min score: %d\n", min);
-	printf("max score: %d\n", max);
-	printf("average score: %d\n", avg);
+	printf("\n\n****************\n");
+	printf("* min score: %d\n", min);
+	printf("* max score: %d\n", max);
+	printf("* avg score: %d\n", avg);
+	printf("****************\n\n");
 
 }
 
@@ -89,8 +115,6 @@ void deallocate(struct student* stud) {
 int main(int some, char ** thing) {
 	
 	struct student *class = allocate();	
-
-	//printf("student mem: %p\n", class);
 
 	generate(class);
 	output(class);

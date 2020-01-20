@@ -1,7 +1,7 @@
 /*******
  * CS261: Assignment 1 - Q.3
  * Name: Alvin Johns
- * Date: 01/13/20
+ * Date: 01/18/20
  * Solution Desc: Demonstrate how to manipulate a string of alphanumeric
  * 	letters to form a camelCase output
  *
@@ -90,7 +90,6 @@ void camelCase(char* word) {
 		}
 	}
 
-
 	// final parsing of all alphabetical chars 
 	// 	using index and pos accordingly
 	while (pos < length) {
@@ -113,23 +112,66 @@ void camelCase(char* word) {
 	// free unneeded array block
 	free(tempStr);
 
-	printf("camelCase(...) prints: %s\n", final);
+	printf("camelCase(char*) prints: %s\n", final);
 
 	// Until camelCase is supposed to return the char*, 
 	// free the final array block.
 	free(final);
 }
 
+// special chars 32 - 64 && 91 - 96 && 123 - 126
+int validate(char *s) {
+
+	int result = -1;
+	int special = -1;
+	int alpha = -1;
+	int i = 0;
+
+	while (s[i] != '\0') {
+
+		if ( (s[i] > 64)  && (s[i] < 91) ) {
+			alpha = 1;
+		}
+	
+		if ( (s[i] > 96)  && (s[i] < 123) ) {
+			alpha = 1;
+		}
+
+		if ( (s[i] > 31)  && (s[i] < 65) ) {
+			special = 1;
+		}
+	
+		if ( (s[i] > 90)  && (s[i] < 97) ) {
+			special = 1;
+		}
+
+		if ( (s[i] > 122)  && (s[i] < 127) ) {
+			special = 1;
+		}
+		i++;
+	}
+
+	// full check
+	if (alpha > 0 && special > 0) {
+		result = 1;	
+	}
+
+	return result;
+}
 
 int main(int some, char ** thing) {
 
 	// ***********	
-	// For quick checking, uncomment and comment apporpriate lines
+	// For quick checking, uncomment and comment appropriate lines
 	// ***********	
 
-	/*	
-	char str[256] = "_random_ _word_provided@$ptr*4con_ran dom word example word ANOTHER_Word";
-	*/
+	//char str[256] = "_random_ _word_provided@$ptr*4con_ran dom word example word ANOTHER_Word";
+
+	// Not valid	
+	//char str[256] = "_____----___--__";
+
+	// Not valid
+	//char str[256] = "example";
 
 	///*
 	char str[256];
@@ -137,7 +179,12 @@ int main(int some, char ** thing) {
 	printf("Enter a string of letters: ");
 
 	fgets(str, 256, stdin);
-	//*/
+	//*/	
+	
+	while (validate(str) < 0) {
+		printf("Invalid input, try again...\n");
+		fgets(str, 256, stdin);
+	}
 
 	camelCase(str);
 

@@ -80,7 +80,7 @@ void output(struct student* students) {
 void summary(struct student* students) {
 	int min = students[0].score;
 	int max = students[0].score;
-	int avg = 0;
+	float avg = 0;
 
 	for (int i = 0; i < 10; ++i) {
 		if (students[i].score <= min) {
@@ -96,9 +96,9 @@ void summary(struct student* students) {
 	avg /= 10;
 
 	printf("\n\n****************\n");
-	printf("* min score: %d\n", min);
-	printf("* max score: %d\n", max);
-	printf("* avg score: %d\n", avg);
+	printf("* min score: %i\n", min);
+	printf("* max score: %i\n", max);
+	printf("* avg score: %.2f\n", avg);
 	printf("****************\n\n");
 
 }

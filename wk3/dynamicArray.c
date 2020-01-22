@@ -93,6 +93,9 @@ void _dynArrSetCapacity(DynArr *v, int newCap)
 {	
 	/* FIXME: You will write this function */
 	
+	assert(v != NULL);
+	assert(newCap > 0);
+	//v->capacity = newCap;	
 }
 
 /* Get the size of the dynamic array
@@ -120,7 +123,6 @@ void addDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
 	assert(v != NULL);	
-	
 }
 
 /*	Get an element from the dynamic array from a specified position
@@ -133,7 +135,6 @@ void addDynArr(DynArr *v, TYPE val)
 	post:	no changes to the dyn Array
 	ret:	value stored at index pos
 */
-
 TYPE getDynArr(DynArr *v, int pos)
 {
 	/* FIXME: You will write this function */
@@ -142,7 +143,7 @@ TYPE getDynArr(DynArr *v, int pos)
 	return 1; 
 }
 
-/*	Put an item into the dynamic array at the specified location,
+/* Put an item into the dynamic array at the specified location,
 	overwriting the element that was there
 
 	param: 	v		pointer to the dynamic array
@@ -158,7 +159,7 @@ void putDynArr(DynArr *v, int pos, TYPE val)
 	/* FIXME: You will write this function */
 }
 
-/*	Swap two specified elements in the dynamic array
+/* Swap two specified elements in the dynamic array
 
 	param: 	v		pointer to the dynamic array
 	param:	i,j		the elements to be swapped

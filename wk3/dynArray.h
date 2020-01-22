@@ -25,6 +25,7 @@ DynArr *newDynArr(int cap);
 void freeDynArr(DynArr *v);
 void deleteDynArr(DynArr *v);
 
+void _dynArrSetCapacity(DynArr *v, int newCap);
 int sizeDynArr(DynArr *v);
 
 void addDynArr(DynArr *v, TYPE val);

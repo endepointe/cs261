@@ -84,6 +84,7 @@ int main(int argc, char* argv[]){
 	printf("Removing 3...\nThe stack's content: [6,5,9]\n");
  	assertTrue(!containsDynArr(dyn, 3), "Test not containing 3");
 	
-     deleteDynArr(dyn); 
+	deleteDynArr(dyn); 
+
 	return 0;
 }

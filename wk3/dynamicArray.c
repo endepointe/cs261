@@ -92,10 +92,21 @@ void deleteDynArr(DynArr *v)
 void _dynArrSetCapacity(DynArr *v, int newCap)
 {	
 	/* FIXME: You will write this function */
-	
-	assert(v != NULL);
-	assert(newCap > 0);
-	//v->capacity = newCap;	
+
+	TYPE *newV = (TYPE*)malloc(sizeof(TYPE)*newCap);
+	assert(newV > 0);
+
+	for (int i = 0; i < v->size; ++i) {
+		newV[i] = v->data[i];
+	}
+
+	for (int j = v->size; j < newCap; ++j) {
+		newV[j] = 0;
+	}
+
+	free(v->data);
+	v->data = newV;
+	v->capacity = newCap;
 }
 
 /* Get the size of the dynamic array
@@ -122,7 +133,12 @@ int sizeDynArr(DynArr *v)
 void addDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
-	assert(v != NULL);	
+	assert(v != NULL);
+	if (v->size >= v->capacity) {
+		_dynArrSetCapacity(v, 2*v->capacity);
+	}
+	v->data[v->size] = val;
+	v->size++;
 }
 
 /*	Get an element from the dynamic array from a specified position
@@ -138,9 +154,12 @@ void addDynArr(DynArr *v, TYPE val)
 TYPE getDynArr(DynArr *v, int pos)
 {
 	/* FIXME: You will write this function */
-
+	
+	assert(pos >= 0);
+	assert(pos < v->size); 	
+	
 	/* FIXME: you must change this return value */
-	return 1; 
+	return v->data[pos]; 
 }
 
 /* Put an item into the dynamic array at the specified location,
@@ -157,6 +176,9 @@ TYPE getDynArr(DynArr *v, int pos)
 void putDynArr(DynArr *v, int pos, TYPE val)
 {
 	/* FIXME: You will write this function */
+	assert(pos < v->size);
+	assert(pos >= 0);
+	v->data[pos] = val;
 }
 
 /* Swap two specified elements in the dynamic array
@@ -171,6 +193,15 @@ void putDynArr(DynArr *v, int pos, TYPE val)
 void swapDynArr(DynArr *v, int i, int  j)
 {
 	/* FIXME: You will write this function */
+
+	assert(i < v->size);
+	assert(j < v->size);
+	assert(i >= 0);
+	assert(j >= 0);
+
+	TYPE temp = v->data[i];
+	v->data[i] = v->data[j];
+	v->data[j] = temp;	
 }
 
 /*	Remove the element at the specified location from the array,
@@ -187,6 +218,14 @@ void swapDynArr(DynArr *v, int i, int  j)
 void removeAtDynArr(DynArr *v, int idx)
 {
 	/* FIXME: You will write this function */
+	assert(idx >= 0);
+	assert(idx < v->size);
+
+	for (int i = idx; i <= v->size-1; i++) {
+		v->data[idx] = v->data[idx+1];
+	}
+
+	v->size--;
 }
 
 
@@ -205,10 +244,8 @@ void removeAtDynArr(DynArr *v, int idx)
 */
 int isEmptyDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
-	
 	/* FIXME:  You will change this return value*/
-	return 1;
+	return !(v->size);
 }
 
 /* 	Push an element onto the top of the stack
@@ -223,6 +260,7 @@ int isEmptyDynArr(DynArr *v)
 void pushDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
+	addDynArr(v,val);	
 }
 
 /*	Returns the element at the top of the stack 
@@ -235,9 +273,9 @@ void pushDynArr(DynArr *v, TYPE val)
 TYPE topDynArr(DynArr *v)
 {
 	/* FIXME: You will write this function */
-	
+	assert(!isEmptyDynArr(v)); 	
 	/* FIXME: You will change this return value*/
-	return 1;
+	return v->data[v->size-1];
 }
 
 /* Removes the element on top of the stack 
@@ -251,6 +289,11 @@ TYPE topDynArr(DynArr *v)
 void popDynArr(DynArr *v)
 {
 	/* FIXME: You will write this function */
+	assert(!isEmptyDynArr(v));
+	// i wonder if I can just do this
+	removeAtDynArr(v, v->size-1);
+	// instead of 
+	// v->size--;
 }
 
 /* ************************************************************************
@@ -270,10 +313,17 @@ void popDynArr(DynArr *v)
 */
 int containsDynArr(DynArr *v, TYPE val)
 {
+	assert(!isEmptyDynArr(v));
 	/* FIXME: You will write this function */
+	int tf = 0;
 	
+	for (int i = 0; i < v->size; ++i) {
+		if (v->data[i] == val) {
+			tf = 1;
+		}
+	}	
 	/* FIXME:  You will change this return value */
-	return 1;
+	return tf;
 
 }
 
@@ -290,4 +340,12 @@ int containsDynArr(DynArr *v, TYPE val)
 void removeDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
+	assert(!isEmptyDynArr(v));
+
+	for (int i = 0; i < v->size; ++i) {
+		if (v->data[i] == val) {
+			removeAtDynArr(v,i);	
+			break;
+		}
+	}
 }

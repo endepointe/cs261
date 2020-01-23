@@ -33,6 +33,15 @@ char nextChar(char* s)
 int isBalanced(char* s)
 {
 	/* FIXME: You will write this function */		
+	int balanced = 0;
+	int paraLeft = 0;
+	int paraRight = 0;
+	int paraBal = 0;
+	int i = 0;
+
+	while (s[i] != '\0') {
+	}
+
 	return 0;
 }
 

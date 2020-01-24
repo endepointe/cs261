@@ -28,7 +28,6 @@ void initDynArr(DynArr *v, int capacity)
 	assert(capacity > 0);
 	assert(v!= 0);
 	v->data = (TYPE *) malloc(sizeof(TYPE) * capacity);
-	assert(v->data != 0);
 	v->size = 0;
 	v->capacity = capacity;	
 }
@@ -221,8 +220,8 @@ void removeAtDynArr(DynArr *v, int idx)
 	assert(idx >= 0);
 	assert(idx < v->size);
 
-	for (int i = idx; i <= v->size-1; i++) {
-		v->data[idx] = v->data[idx+1];
+	for (int i = idx; i < v->size; i++) {
+		v->data[i] = v->data[i+1];
 	}
 
 	v->size--;

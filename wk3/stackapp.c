@@ -33,14 +33,25 @@ char nextChar(char* s)
 int isBalanced(char* s)
 {
 	/* FIXME: You will write this function */		
-	int balanced = 0;
-	int paraLeft = 0;
-	int paraRight = 0;
-	int paraBal = 0;
+	
+	assert(s != 0);
+
 	int i = 0;
 
-	while (s[i] != '\0') {
+	while ( s[i] != '\0') {
+		i++;
 	}
+
+	printf("\n");
+
+	// Init a stack to hold, at most, i chars.
+	DynArr* stack = newDynArr(i);
+
+	// starting at the end of the temp string, check if the closing 
+	// types of parenthesis are matched
+	printf("\n");
+
+	free(stack);
 
 	return 0;
 }

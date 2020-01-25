@@ -37,35 +37,16 @@ int isBalanced(char* s)
 	
 	assert(s != 0);
 
-	rnt i = 0;
-
-	while ( s[i] != '\0') {
+	int i = 0;
+	DynArr* stack = newDynArr(10);
+	
+	while (s[i] != '\0') {
+		pushDynArr(stack[i]->data, s[i]);
 		i++;
+		printf("%c", stack[i]->data);
 	}
 
-	// Init a stack to hold, at most, i chars.
-	DynArr* stack = newDynArr(i);
-
-	while (s[i] != '\0') {
-		switch (nextChar(*s[i])) {
-			case 40:
-			case 41:
-			case 90:
-			case 91:
-			case 123:
-			case 125:
-				pushDynArr(stack, s[i]);
-			break;
-		}
-
 	printf("\n");
-
-	// starting at the end of the temp string, check if the closing 
-	// types of parenthesis are matched
-	printf("\n");
-
-	printf("%s\n", stack);
-	free(stack);
 
 	return 0;
 }

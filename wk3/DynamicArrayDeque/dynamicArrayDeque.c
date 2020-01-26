@@ -1,13 +1,14 @@
-/*	dynamicArray.c: Dynamic Array implementation. */
+/*	dynArr.c: Dynamic Array implementation. */
 #include <assert.h>
 #include <stdlib.h>
-#include "dynArray.h"
+#include "dynamicArrayDeque.h"
 
 struct DynArr
 {
 	TYPE *data;		/* pointer to the data array */
 	int size;		/* Number of elements in the array */
-	int capacity;	/* capacity ofthe array */
+	int capacity;	/* capacity of the array */
+	int beg;        /* Beginning of the 'floating' array */
 };
 
 
@@ -19,7 +20,7 @@ struct DynArr
 
 	param: 	v		pointer to the dynamic array
 	param:	cap 	capacity of the dynamic array
-	pre:	v is not null
+	pre:	v is not null and cap > 0
 	post:	internal data array can hold cap elements
 	post:	v->data is not null
 */
@@ -28,25 +29,28 @@ void initDynArr(DynArr *v, int capacity)
 	assert(capacity > 0);
 	assert(v!= 0);
 	v->data = (TYPE *) malloc(sizeof(TYPE) * capacity);
+	assert(v->data != 0);
 	v->size = 0;
-	v->capacity = capacity;	
+	v->capacity = capacity;
+	v->beg = 0;
+
 }
 
 /* Allocate and initialize dynamic array.
 
+	param:	cap 	desired capacity for the dyn array
 	pre:	none
 	post:	none
 	ret:	a non-null pointer to a dynArr of cap capacity
 			and 0 elements in it.		
 */
-DynArr* newDynArr(int cap)
+DynArr* createDynArr(int cap)
 {
 	assert(cap > 0);
-	DynArr *da = (DynArr *)malloc(sizeof( DynArr ));
-	assert(da != 0);
-	initDynArr(da,cap);
-
-	return da;
+	DynArr *r = (DynArr *)malloc(sizeof( DynArr));
+	assert(r != 0);
+	initDynArr(r,cap);
+	return r;
 }
 
 /* Deallocate data array in dynamic array. 
@@ -66,6 +70,7 @@ void freeDynArr(DynArr *v)
 	}
 	v->size = 0;
 	v->capacity = 0;
+	v->beg = 0;
 }
 
 /* Deallocate data array and the dynamic array ure. 
@@ -90,22 +95,30 @@ void deleteDynArr(DynArr *v)
 */
 void _dynArrSetCapacity(DynArr *v, int newCap)
 {	
-	/* FIXME: You will write this function */
+	
+	int i;
+	
+	/* Create a new underlying array*/
+	TYPE *newData = (TYPE*)malloc(sizeof(TYPE)*newCap);
+	assert(newData != 0);
+	
+	/* copy elements to it */
+	//int j = v->beg;
+	for(i = 0; i <  v->size; i++)
+	{
+		newData[i] = v->data[_physicalIndex(v,i)];
 
-	TYPE *newV = (TYPE*)malloc(sizeof(TYPE)*newCap);
-	assert(newV > 0);
-
-	for (int i = 0; i < v->size; ++i) {
-		newV[i] = v->data[i];
 	}
-
-	for (int j = v->size; j < newCap; ++j) {
-		newV[j] = 0;
-	}
-
+	
+	for(i = v->size; i < newCap; i++)
+		newData[i] = 0;
+	
+	/* Delete the oldunderlying array*/
 	free(v->data);
-	v->data = newV;
+	/* update capacity and size and data*/
+	v->data = newData;
 	v->capacity = newCap;
+	v->beg = 0;
 }
 
 /* Get the size of the dynamic array
@@ -126,18 +139,14 @@ int sizeDynArr(DynArr *v)
 	param:	val		the value to add to the end of the dynamic array
 	pre:	the dynArry is not null
 	post:	size increases by 1
-	pre:	if reached capacity, capacity is doubled
+	post:	if reached capacity, capacity is doubled
 	post:	val is in the last utilized position in the array
 */
 void addDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
-	assert(v != NULL);
-	if (v->size >= v->capacity) {
-		_dynArrSetCapacity(v, 2*v->capacity);
-	}
-	v->data[v->size] = val;
-	v->size++;
+
+	addBackDynArr(v, val);
+
 }
 
 /*	Get an element from the dynamic array from a specified position
@@ -146,22 +155,21 @@ void addDynArr(DynArr *v, TYPE val)
 	param:	pos		integer index to get the element from
 	pre:	v is not null
 	pre:	v is not empty
-	pos < size of the dyn array and >= 0
+	pre:	pos < size of the dyn array and >= 0
 	post:	no changes to the dyn Array
 	ret:	value stored at index pos
 */
+
 TYPE getDynArr(DynArr *v, int pos)
 {
-	/* FIXME: You will write this function */
-	
-	assert(pos >= 0);
-	assert(pos < v->size); 	
-	
-	/* FIXME: you must change this return value */
-	return v->data[pos]; 
+
+   assert(pos < v->size);
+   assert(pos >= 0);
+   
+   return v->data[_physicalIndex(v, pos)];
 }
 
-/* Put an item into the dynamic array at the specified location,
+/*	Put an item into the dynamic array at the specified location,
 	overwriting the element that was there
 
 	param: 	v		pointer to the dynamic array
@@ -174,13 +182,12 @@ TYPE getDynArr(DynArr *v, int pos)
 */
 void putDynArr(DynArr *v, int pos, TYPE val)
 {
-	/* FIXME: You will write this function */
 	assert(pos < v->size);
 	assert(pos >= 0);
-	v->data[pos] = val;
+	v->data[_physicalIndex(v,pos)] = val;
 }
 
-/* Swap two specified elements in the dynamic array
+/*	Swap two specified elements in the dynamic array
 
 	param: 	v		pointer to the dynamic array
 	param:	i,j		the elements to be swapped
@@ -191,16 +198,18 @@ void putDynArr(DynArr *v, int pos, TYPE val)
 */
 void swapDynArr(DynArr *v, int i, int  j)
 {
-	/* FIXME: You will write this function */
+
+	TYPE  temp;
 
 	assert(i < v->size);
 	assert(j < v->size);
 	assert(i >= 0);
 	assert(j >= 0);
 
-	TYPE temp = v->data[i];
-	v->data[i] = v->data[j];
-	v->data[j] = temp;	
+	temp = v->data[_physicalIndex(v,i)];
+	v->data[_physicalIndex(v,i)] = v->data[_physicalIndex(v,j)];
+	v->data[_physicalIndex(v,j)] = temp;
+
 }
 
 /*	Remove the element at the specified location from the array,
@@ -217,14 +226,21 @@ void swapDynArr(DynArr *v, int i, int  j)
 void removeAtDynArr(DynArr *v, int idx)
 {
 	/* FIXME: You will write this function */
-	assert(idx >= 0);
-	assert(idx < v->size);
 
-	for (int i = idx; i < v->size; i++) {
-		v->data[i] = v->data[i+1];
-	}
+  int i;
 
-	v->size--;
+   assert(idx < v->size);
+   assert(idx >= 0);
+
+   //Move all elements up
+
+   for(i = idx; i <= v->size-2; i++)
+   {
+      v->data[_physicalIndex(v,i)] = v->data[_physicalIndex(v,i+1)];
+   }
+
+   v->size--;
+
 }
 
 
@@ -243,7 +259,6 @@ void removeAtDynArr(DynArr *v, int idx)
 */
 int isEmptyDynArr(DynArr *v)
 {
-	/* FIXME:  You will change this return value*/
 	return !(v->size);
 }
 
@@ -258,8 +273,7 @@ int isEmptyDynArr(DynArr *v)
 */
 void pushDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
-	addDynArr(v,val);	
+	addDynArr(v, val);
 }
 
 /*	Returns the element at the top of the stack 
@@ -271,10 +285,8 @@ void pushDynArr(DynArr *v, TYPE val)
 */
 TYPE topDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
-	assert(!isEmptyDynArr(v)); 	
-	/* FIXME: You will change this return value*/
-	return v->data[v->size-1];
+	assert(!isEmptyDynArr(v));
+	return v->data[_physicalIndex(v, v->size-1)];
 }
 
 /* Removes the element on top of the stack 
@@ -287,12 +299,8 @@ TYPE topDynArr(DynArr *v)
 */
 void popDynArr(DynArr *v)
 {
-	/* FIXME: You will write this function */
-	assert(!isEmptyDynArr(v));
-	// i wonder if I can just do this
-	removeAtDynArr(v, v->size-1);
-	// instead of 
-	// v->size--;
+	assert(! isEmptyDynArr(v));
+	v->size--; 
 }
 
 /* ************************************************************************
@@ -312,17 +320,13 @@ void popDynArr(DynArr *v)
 */
 int containsDynArr(DynArr *v, TYPE val)
 {
+	int i = 0;
 	assert(!isEmptyDynArr(v));
-	/* FIXME: You will write this function */
-	int tf = 0;
-	
-	for (int i = 0; i < v->size; ++i) {
-		if (v->data[i] == val) {
-			tf = 1;
-		}
-	}	
-	/* FIXME:  You will change this return value */
-	return tf;
+   
+	for(i = 0; i < sizeDynArr(v); i++)
+      if(EQ(v->data[_physicalIndex(v,i)], val) )
+         return 1;
+      return 0;
 
 }
 
@@ -338,13 +342,111 @@ int containsDynArr(DynArr *v, TYPE val)
 */
 void removeDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */
+	int i = 0;
+
 	assert(!isEmptyDynArr(v));
 
-	for (int i = 0; i < v->size; ++i) {
-		if (v->data[i] == val) {
-			removeAtDynArr(v,i);	
-			break;
-		}
-	}
+	for(i = 0; i < sizeDynArr(v); i++)
+      if(EQ(v->data[_physicalIndex(v,i)], val))
+      {
+           removeAtDynArr(v,i); 
+           break;
+      }
+}
+
+
+/*
+ * Wraps an index from back to front and fron to back
+ * param: index
+ * pre: -1 <= index <=cap
+ * post: 0<= index < cap
+ */
+
+int _physicalIndex (DynArr *v , int idx)
+{
+	int offset = v->beg + idx;
+	int absIndex = offset;
+
+	if(offset < 0)
+		absIndex = offset + v->capacity;
+	if(offset >= v->capacity)
+		absIndex = offset - v->capacity;
+	return absIndex;
+}
+
+
+/*
+ *  Computes the Physical Index given logical index  (e.g. performs wrap around)
+ *  param:  v
+ *  param:  logincal index
+ *  pre: 	v is not null
+ *  pre:	0<= logicalIndex < size
+ *  post:	none
+ */
+/*int _physicalIndex(DynArr *v, int lindex)
+{
+	assert(v!=0);
+	return((lindex + v->beg) % v->capacity);
+}*/
+/* ************************************************************************
+ Deque Interface Functions
+ *************************************************************************/
+void addFrontDynArr(DynArr *v, TYPE val){
+	if (v->size >= v->capacity) 
+		_dynArrSetCapacity(v, 2*v->capacity);
+
+	v->beg = _physicalIndex(v, -1);
+	v->data[v->beg] = val;
+	v->size++;
+	
+}
+
+void removeFrontDynArr(DynArr *v){
+	assert (v->size > 0);
+
+	v->beg = _physicalIndex(v, 1);
+	v->size--;
+}	
+	
+void addBackDynArr(DynArr *v, TYPE val)
+{
+	int index;
+	if (v->size >= v->capacity)
+		_dynArrSetCapacity(v, 2*v->capacity);
+	
+	index = _physicalIndex(v, v->size);
+	v->data[index] = val;
+	v->size++;
+}
+
+void removeBackDynArr(DynArr *v){
+	assert(v->size >  0);
+	v->size--;
+}
+
+TYPE frontDynArr(DynArr *v){
+	assert (v->size > 0);
+	return v->data[_physicalIndex(v,0)];
+}	
+	
+	
+TYPE backDynArr(DynArr *v){
+
+	int index = _physicalIndex(v, v->size - 1);
+	return v->data[index];
+	
+}
+
+/* Utility function for looking into the array */
+
+void printDynArr(DynArr *v)
+{
+	int i = 0;
+	printf("==================\n");
+	for (i = 0; i < v->size; i++)
+		printf("V[%d] == %d\n", i, v->data[_physicalIndex(v,i)]);
+		   
+	printf("==================\n");
+
+	
 }

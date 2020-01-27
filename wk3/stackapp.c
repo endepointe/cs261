@@ -4,7 +4,6 @@
 #include <assert.h>
 #include "dynArray.h"
 
-
 /* ***************************************************************
 Using stack to check for unbalanced parentheses.
 ***************************************************************** */
@@ -50,6 +49,27 @@ int checkOpenPunc(char c) {
 	return result;
 }	
 
+/* Helper function to check if the stack of open parentheses 
+	contains a corresponding closing parenthesis 
+	param: 	s pointer to a string  and DynArr*	
+	pre: 	
+	post:	
+*/
+int check(int val, DynArr *da) {
+
+	int b;
+
+	if (isEmptyDynArr(da)) {
+		b = 0;
+		return b;
+	}
+	if (topDynArr(da) == val) {
+		popDynArr(da);
+		b = 1;
+	}	
+	return b;
+}
+
 /* Checks whether the (), {}, and [] are balanced or not
 	param: 	s pointer to a string 	
 	pre: 	
@@ -69,50 +89,24 @@ int isBalanced(char* s)
 
 		switch (s[i]) {
 			case 41:
-				if (isEmptyDynArr(stack)) {
-					bal = 0;
-					break;
-				}
-				if (topDynArr(stack) == 40) {
-					popDynArr(stack);
-					bal = 1;
-				}	
+				bal = check(40, stack);
 			break;					
 			case 93:
-				if (isEmptyDynArr(stack)) {
-					bal = 0;
-					break;
-				}
-				if (topDynArr(stack) == 91) {
-					popDynArr(stack);
-					bal = 1;
-				}	
+				bal = check(91, stack);
 			break;
 			case 125:
-				if (isEmptyDynArr(stack)) {
-					bal = 0;
-					break;
-				}
-				if (topDynArr(stack) == 123) { 
-					popDynArr(stack);
-					bal = 1;
-				}	
-			break;
-			default:
+				bal = check(123, stack);
 			break;
 		}			
 	}
-///*
-	for (int i = 0; i < sizeDynArr(stack); ++i) {
-		printf("%c", getDynArr(stack, i));
-	}
-//*/
 
 	if (bal == 1 && !isEmptyDynArr(stack)) {
 		bal = 0;
 	}
 
 	printf("\n");
+	
+	deleteDynArr(stack);
 
 	return bal;
 }

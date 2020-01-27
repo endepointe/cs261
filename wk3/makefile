@@ -20,8 +20,8 @@ clean:
 	rm stackapp.o
 	rm testDynArray.o
 	rm stackapp
-	rm testda
-	rm prog
+	rm testda.o
+	rm prog.o
 	rm *.exe
 	rm *.o
 	rm prog.exe

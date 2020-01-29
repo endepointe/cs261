@@ -1,4 +1,12 @@
-/*	stack.c: Stack application. */
+/*	stack.c: Stack application. 
+ * Author: Alvin Johns
+ * Date: January 29, 2019
+ * Desc: C program demonstrating the use of a stack to check if a 
+ * 	set of input punctuations are balanced. For example: 
+ * 		"(a,b) => { [1,2,3] return 0; }" is balanced while
+ * 		"(a,b) => ({ [1,2,3]) return 0; }" is not.
+ *	*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -84,13 +92,12 @@ int isBalanced(char* s)
 	DynArr *stack = newDynArr(8);
 	
 	while (ch != '\0') {	
-	//for (int i = 0; s[i] != '\0'; ++i) {
 		ch = nextChar(s);
-		if (checkOpenPunc(ch /*(s[i]*/) == 1) {
-			pushDynArr(stack, ch /*s[i]*/);
+		if (checkOpenPunc(ch) == 1) {
+			pushDynArr(stack, ch);
 		}
 
-		switch (ch /*s[i]*/) {
+		switch (ch) {
 			case 41:
 				bal = check(40, stack);
 			break;					
@@ -101,7 +108,6 @@ int isBalanced(char* s)
 				bal = check(123, stack);
 			break;
 		}			
-		//printf("NextChar returns: %c\n", nextChar(s));
 	}
 
 	if (bal == 1 && !isEmptyDynArr(stack)) {

@@ -95,11 +95,11 @@ void summary(struct student* students) {
 
 	avg /= 10;
 
-	printf("\n\n****************\n");
-	printf("* min score: %i\n", min);
-	printf("* max score: %i\n", max);
-	printf("* avg score: %.2f\n", avg);
-	printf("****************\n\n");
+	printf("\n\n==SCORES==\n");
+	printf("Minimum: %i\n", min);
+	printf("Maximum: %i\n", max);
+	printf("Average: %.2f\n", avg);
+	printf("==========\n\n");
 
 }
 

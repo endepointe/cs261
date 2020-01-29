@@ -80,14 +80,17 @@ int isBalanced(char* s)
 	/* FIXME: You will write this function */		
 	assert(s != 0);
 	int bal = 0;
+	char ch = ' ';
 	DynArr *stack = newDynArr(8);
 	
-	for (int i = 0; s[i] != '\0'; ++i) {
-		if (checkOpenPunc(s[i]) == 1) {
-			pushDynArr(stack, s[i]);
+	while (ch != '\0') {	
+	//for (int i = 0; s[i] != '\0'; ++i) {
+		ch = nextChar(s);
+		if (checkOpenPunc(ch /*(s[i]*/) == 1) {
+			pushDynArr(stack, ch /*s[i]*/);
 		}
 
-		switch (s[i]) {
+		switch (ch /*s[i]*/) {
 			case 41:
 				bal = check(40, stack);
 			break;					
@@ -98,6 +101,7 @@ int isBalanced(char* s)
 				bal = check(123, stack);
 			break;
 		}			
+		//printf("NextChar returns: %c\n", nextChar(s));
 	}
 
 	if (bal == 1 && !isEmptyDynArr(stack)) {

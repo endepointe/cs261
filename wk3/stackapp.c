@@ -1,6 +1,6 @@
 /*	stack.c: Stack application. 
  * Author: Alvin Johns
- * Date: January 29, 2019
+ * Date: January 29, 2020
  * Desc: C program demonstrating the use of a stack to check if a 
  * 	set of input punctuations are balanced. For example: 
  * 		"(a,b) => { [1,2,3] return 0; }" is balanced while

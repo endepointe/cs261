@@ -8,29 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-
-/* ***************************************************************
-Do something here for the week 4 worksheets
-***************************************************************** */
-
-/* Returns the next character of the string, once reaches end return '0' (zero)
-	param: 	s pointer to a string 	
-			
-*/
-char nextChar(char* s) {
-	static int i = -1;
-	char c;
-	++i;
-	c = *(s+i);
-	if (c == '\0') {
-		return '\0';	
-	}
-	return c;
-}
-
-struct dLink {
-	TYPE value
-}
+#include "linkedList.h"
 
 int main(int argc, char* argv[]){
 	

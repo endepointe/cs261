@@ -19,16 +19,6 @@ Do something here for the week 4 worksheets
 	param: 	s pointer to a string 	
 			
 */
-char nextChar(char* s) {
-	static int i = -1;
-	char c;
-	++i;
-	c = *(s+i);
-	if (c == '\0') {
-		return '\0';	
-	}
-	return c;
-}
 
 struct dLink {
 	TYPE value;
@@ -51,5 +41,5 @@ void linkedListAdd(struct linkedList *lst, TYPE e);
 
 int linkedListContains(struct linkedList *lst, TYPE e);
 void linkedListRemove(struct linkedList *lst, TYPE e);
-
+void printLinkedList(struct linkedList *lst);
 #endif

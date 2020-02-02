@@ -1,5 +1,8 @@
 /* Dynamically allocated array */
 
+#include <assert.h>
+#include "dynArray.h"
+
 void initDynArr(struct DynArr *da, int capacity) {
 	da->data = malloc(sizeof(TYPE) * capacity);
 	assert(da->data != NULL);

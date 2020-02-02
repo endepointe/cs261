@@ -27,12 +27,37 @@ void linkedListStackFree(struct linkdListStack *s) {
 void linkedListStackPush(struct linkedListStack *s, TYPE d) {
 	struct link *newLink = (struct link*)malloc(sizeof(struct link));	
 	assert(newLink != NULL);
-	/* resume here */
+	newLink->value = d;
+	assert(s != NULL);
+	if (s->firstLink == 0) {
+		newLink->next = 0;
+	} else {
+		newLink->next = s->firstLink;
+	}	
+
+	s->firstLink = newLink;
 }
 
-TYPE linkedListStackTop(struct linkedListStack *s);
+TYPE linkedListStackTop(struct linkedListStack *s) {
+	assert(s != 0);
+	assert(!linkedListStackIsEmpty(s));
+	return s->firstLink->value;
+}
 
-void linkedListStackPop(struct linkdListStack *s);
+void linkedListStackPop(struct linkdListStack *s) {
+	assert(s != 0);
+	assert(!linkedListStackIsEmpty(s));
+	struct link *temp;
+	temp = s->firstLink;
+	s->firstLink = s->firstLink->next;
+	free(temp);
+	temp = NULL;
+}
 
-int linkedListStackIsEmpty(struct linkedListStack *s);
+int linkedListStackIsEmpty(struct linkedListStack *s) {
+	if (s->firstLink == NULL) {
+		return 1;
+	}
+	return 0;
+}
 #endif

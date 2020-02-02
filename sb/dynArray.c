@@ -70,7 +70,32 @@ void swapDynArr(struct DynArr *da, int i, int j) {
 }
 
 void removeAtDynArr(struct DynArr *da, int index) {
-	swapDynArr(da, index, da->data[size-1]);
+	if (index < da->size - 1) {
+		swapDynArr(da, index, da->data[size-1]);
+	}
 	da->data[size-1] = 0;
 	da->size--;
 }
+
+void dynArrayPush(struct DynArr *da, TYPE e) {
+	assert(da != NULL);
+	addDynArray(da, e); 	
+}
+
+TYPE dynArrayTop(struct DynArr *da) {
+	assert(da != NULL);
+	assert(sizeDynArr(da) > 0);
+	return getDynArr(da, sizeDynArr(da) - 1);
+}
+
+void dynArrayPop(struct DynArr *da) {
+	assert(da != NULL);
+	assert(sizeDynArr(da) > 0);
+	removeAtDynArr(da, sizeDynArr(da) - 1);
+}
+
+int dynArrayIsEmpty(struct DynArr *da) {
+	assert(da != NULL);
+	return !(sizeDynArr(da));
+}
+

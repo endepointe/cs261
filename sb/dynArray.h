@@ -29,5 +29,13 @@ void putDynArr(struct DynArr *da, int pos, TYPE val);
 void swapDynArr(struct DynArr *da, int i, int j);
 
 void removeAtDynArr(struct DynArr *da, int index);
+
+void dynArrayPush(struct DynArr *da, TYPE e);
+
+TYPE dynArrayTop(struct DynArr *da);
+
+void dynArrayPop(struct DynArr *da);
+
+int dynArrayIsEmpty(struct DynArr *da);
 #endif
 

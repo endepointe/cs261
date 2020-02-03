@@ -18,29 +18,32 @@ struct linkedList {
 	int size;
 };
 */
+
 void linkedListInit(struct linkedList *q) {
-	struct link *lnk = (struct link*)malloc(sizeof(struct link);
-	assert(lnk != NULL);
-	lnk->next = NULL;
-	q->firstLink = q->lastLink = lnk;
+	q->frontSentinel = (struct dlink*)malloc(sizeof(dlink));
+	assert(q->frontSentinel != NULL);
+	q->backSentinel = (struct dlink*)malloc(sizeof(dlink));
+	assert(q->backSentinel != NULL);
+	q->frontSentinel->next = q->backSentinel;
+	q->backSentinel->prev = q->fronSentinel;
+	q->size = 0;
 }
 
 void linkedListFree(struct linkedList *q) {
-
+	while (q->size > 0) {
+		linkedListRemoveFront(q);
+		free(q->frontSentinel);
+		free(q->backSentinel);
+		q->frontSentinel = q->frontSentinel = NULL;
+	}
 }
 
 void linkedListAddFront(struct linkedList *q, TYPE e) {
-
+	_addlink(q, q->frontSentinel->next, e);
 }
 
 void linkedListAddBack(struct linkedList *q, TYPE e) {
-	assert(q != NULL);
-	struct link *newLink = (struct link*)malloc(sizeof(struct link));
-	assert(newLink != NULL);
-	newLink->value = e;
-	newLink->next = NULL;
-	q->lastLink->next = newLink;
-	q->lastLink = newLink;
+	_addLink(q, q->backSentinel->prev, e);
 }
 
 void linkedListRemoveFront(struct linkedList *q) {
@@ -55,18 +58,27 @@ void linkedListRemoveFront(struct linkedList *q) {
 	}
 	free(temp);
 	temp = NULL;
+	q->size--;
 }
 
 void linkedListRemoveBack(struct linkedList *q) {
-
+	
 }
 
 void _addLink(struct linkedList *q, struct dlink *lnk, TYPE e) {
+	assert(q != NULL);
+	struct dlink *newLink = (struct dlink*)malloc(sizeof(dlink));
+	assert(newLink != NULL);
+	newLink->value = e;
+	newLink->next = q->frontSentinel->next;	
+	newLink->prev = q->frontSentinel;
+	q->frontSentinel = newLink;	
 
 }
 
+//[fsent]<->[data]<->[data]<->[data]<->[bsent]
 void _removeLink(struct linkedList *q, struct dlink *lnk) {
-
+	assert(q != NULL);
 }
 
 TYPE linkedListFront(struct linkedList *q);

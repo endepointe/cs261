@@ -120,11 +120,11 @@ static void removeLink(struct LinkedList* list, struct Link* link)
 {
 	/* FIXME: You will write this function */
 	assert(!linkedListIsEmpty(list));
-	//struct Link *temp = link;
+	struct Link *temp = link;
 	link->prev->next = link->next;
 	link->next->prev = link->prev;
-	free(link);
-	//temp = 0;
+	free(temp);
+	temp = 0;
 	list->size--;
 }
 
@@ -297,8 +297,10 @@ int linkedListIsEmpty(struct LinkedList* deque)
 void linkedListPrint(struct LinkedList* deque)
 {
 	/* FIXME: You will write this function */
+	assert(!linkedListIsEmpty(deque));	
 	struct Link *curr = deque->frontSentinel->next;
-	while (curr != deque->backSentinel) {
+
+	while (curr->next != deque->backSentinel) {
 		printf("%d ", curr->value);
 		curr = curr->next;
 	}

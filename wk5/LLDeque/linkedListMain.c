@@ -16,10 +16,10 @@ int main(){
 	printf("%i\n", linkedListBack(l));
 	linkedListRemoveFront(l);
 	linkedListRemoveBack(l);
-	linkedListPrint(l);
+	//linkedListPrint(l);
         linkedListDestroy(l);
 /* BAG */
-	
+/*	
       struct LinkedList* k = linkedListCreate(); 
        linkedListAdd (k, (TYPE)10);
        linkedListAdd (k, (TYPE)11);
@@ -28,6 +28,7 @@ int main(){
        linkedListRemove(k, (TYPE)11);
         linkedListPrint(k);
         linkedListDestroy(k);
+*/
 	return 0;
 }
 

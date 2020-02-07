@@ -78,35 +78,6 @@ static void init(struct LinkedList* list) {
 }
 
 /**
- 	Adds a new link with the given value before the given link and
-	increments the list's size.
- 	param: 	list 	struct LinkedList ptr
- 	param:	link 	struct Link ptr
- 	param: 	TYPE
-	pre: 	list and link are not null
-	post: 	newLink is not null
-			newLink w/ given value is added before param link
-			list size is incremented by 1
- */
-// newlink
-// link link link 
-// link newlink link link
-static void addLinkBefore(struct LinkedList* list, struct Link* link, TYPE value)
-{
-	/* FIXME: You will write this function */
-	assert(!linkedListIsEmpty(list));
-
-	struct Link *newLink = (struct Link*)malloc(sizeof(struct Link));
-	assert(newLink != NULL);
-
-	newLink->value = value;
-	newLink->prev = link->prev;
-	newLink->next = link;
-
-	link->prev = newLink;
-}
-
-/**
 	Removes the given link from the list and
 	decrements the list's size.
 	param: 	list 	struct LinkedList ptr
@@ -124,7 +95,7 @@ static void removeLink(struct LinkedList* list, struct Link* link)
 	link->prev->next = link->next;
 	link->next->prev = link->prev;
 	free(temp);
-	temp = 0;
+	temp = NULL;
 	list->size--;
 }
 
@@ -153,14 +124,18 @@ struct LinkedList* linkedListCreate()
  */
 void linkedListDestroy(struct LinkedList* list)
 {
-	assert(list != NULL);
+	//assert(list != NULL);
 	while (!linkedListIsEmpty(list)) {
-		linkedListRemoveFront(list);
+		removeLink(list, list->frontSentinel->next);
 	}
+	/*
 	free(list->frontSentinel);
+	list->frontSentinel = NULL;
 	free(list->backSentinel);
-	free(list);
-	list = NULL;
+	list->backSentinel = NULL;
+	*/
+	//free(list);
+	//list = NULL;
 }
 
 /**
@@ -178,10 +153,10 @@ void linkedListAddFront(struct LinkedList* deque, TYPE value)
 	struct Link *newLink = (struct Link*)malloc(sizeof(struct Link));
 	assert(newLink != NULL);
 	newLink->value = value;
-	deque->frontSentinel->next = newLink;
-	deque->frontSentinel->next->prev = newLink;
 	newLink->next = deque->frontSentinel->next;
 	newLink->prev = deque->frontSentinel;
+	deque->frontSentinel->next = newLink;
+	deque->size++;
 }
 
 /**
@@ -199,11 +174,10 @@ void linkedListAddBack(struct LinkedList* deque, TYPE value)
 	struct Link *newLink = (struct Link*)malloc(sizeof(struct Link));
 	assert(newLink != NULL);
 	newLink->value = value;
-	deque->backSentinel->prev = newLink;
-	deque->backSentinel->prev->next = newLink;
 	newLink->prev = deque->backSentinel->prev;
 	newLink->next = deque->backSentinel;
-
+	deque->backSentinel->prev =  newLink;
+	deque->size++;
 }
 
 /**
@@ -271,19 +245,8 @@ void linkedListRemoveBack(struct LinkedList* deque)
  */
 int linkedListIsEmpty(struct LinkedList* deque)
 {
-	int s = deque->size;
-	int e;
 	/* FIXME: You will write this function */
-	if (deque->frontSentinel->next == deque->backSentinel) {
-		e = 1;
-	} else {
-		e = 0;
-	}
-
-	if (s && e) {
-		return 1;
-	}
-	return 0;
+	return !(deque->size);
 }
 
 /**
@@ -299,12 +262,19 @@ void linkedListPrint(struct LinkedList* deque)
 	/* FIXME: You will write this function */
 	assert(!linkedListIsEmpty(deque));	
 	struct Link *curr = deque->frontSentinel->next;
+	int count = deque->size;
 
-	while (curr->next != deque->backSentinel) {
-		printf("%d ", curr->value);
-		curr = curr->next;
+	if (linkedListIsEmpty(deque)) {
+		printf("\nThe list is empty\n");
+	} else {	
+		printf("\nList: ");
+		while (count > 0) {
+			printf("%d ", curr->value);
+			curr = curr->next;
+			count--;
+		}
+		printf("\n");
 	}
-	printf("The list is empty\n");
 }
 
 /**
@@ -320,14 +290,7 @@ void linkedListPrint(struct LinkedList* deque)
 void linkedListAdd(struct LinkedList* bag, TYPE value)
 {
 	/* FIXME: You will write this function */
-	assert(bag != NULL);
-	struct Link *newLink = (struct Link*)malloc(sizeof(struct Link));
-	assert(newLink != NULL);
-	newLink->value = value;
-	bag->frontSentinel->next = newLink;
-	bag->frontSentinel->next->prev = newLink;
-	newLink->prev = bag->frontSentinel;
-	newLink->next = bag->frontSentinel->next->next;	
+
 }
 
 /**
@@ -369,5 +332,4 @@ void linkedListRemove(struct LinkedList* bag, TYPE value)
 			removeLink(bag, curr);
 		}
 	}	
-
 }

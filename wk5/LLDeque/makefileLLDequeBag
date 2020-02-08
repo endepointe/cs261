@@ -14,4 +14,4 @@ clean:
 	-rm *.o
 
 cleanall: clean
-	-rm -rf prog.exe prog *.o *.exe *.exe.stackdump
+	-rm prog

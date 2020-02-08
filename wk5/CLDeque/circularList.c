@@ -99,7 +99,11 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
 	assert(link != NULL);
-			
+	struct Link *newLink = createLink(value);
+	newLink->next = link->next;
+	newLink->prev = link;
+	link->next = newLink;
+	deque->size++;	
 }
 
 /**
@@ -114,6 +118,12 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 static void removeLink(struct CircularList* deque, struct Link* link)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	assert(link != NULL);
+	link->prev->next = link->next;
+	link->next->prev = link->prev;
+	free(link);
+	deque->size--;
 }
 
 /**
@@ -140,6 +150,14 @@ struct CircularList* circularListCreate()
 void circularListDestroy(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	while (deque->sentinel->next != deque->sentinel->prev) {
+		removeLink(deque, deque->sentinel->next);
+	}
+	free(deque->sentinel);
+	deque->sentinel = NULL;
+	free(deque);
+	deque = NULL;
 }
 
 /**
@@ -153,6 +171,8 @@ void circularListDestroy(struct CircularList* deque)
 void circularListAddFront(struct CircularList* deque, TYPE value)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	addLinkAfter(deque, deque->sentinel->next, value);
 }
 
 /**
@@ -166,6 +186,8 @@ void circularListAddFront(struct CircularList* deque, TYPE value)
 void circularListAddBack(struct CircularList* deque, TYPE value)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	addLinkAfter(deque, deque->sentinel->prev, value);
 }
 
 /**
@@ -179,6 +201,9 @@ void circularListAddBack(struct CircularList* deque, TYPE value)
 TYPE circularListFront(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	assert(!circularListIsEmpty(deque));	
+	return deque->sentinel->next->value;
 }
 
 /**
@@ -192,6 +217,9 @@ TYPE circularListFront(struct CircularList* deque)
 TYPE circularListBack(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	assert(!circularListIsEmpty(deque));	
+	return deque->sentinel->prev->value;
 }
 
 /**
@@ -204,7 +232,9 @@ TYPE circularListBack(struct CircularList* deque)
 void circularListRemoveFront(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
-
+	assert(deque != NULL);
+	assert(!circularListIsEmpty(deque));
+	removeLink(deque, deque->sentinel->next);
 }
 
 /**
@@ -217,7 +247,9 @@ void circularListRemoveFront(struct CircularList* deque)
 void circularListRemoveBack(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
-
+	assert(deque != NULL);
+	assert(!circularListIsEmpty(deque));
+	removeLink(deque, deque->sentinel->prev);
 }
 
 /**
@@ -230,7 +262,8 @@ void circularListRemoveBack(struct CircularList* deque)
 int circularListIsEmpty(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
-
+	assert(deque != NULL);
+	return !(deque->size);
 }
 
 /**
@@ -244,6 +277,20 @@ int circularListIsEmpty(struct CircularList* deque)
 void circularListPrint(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+
+	struct Link *curr = deque->sentinel->next;
+
+	if (circularListIsEmpty(deque)) {
+		printf("\nThe list is empty\n");
+	}
+
+	while (curr != deque->sentinel) {
+		printf("%.2f ", curr->value);
+		curr = curr->next;
+	}
+
+	printf("\n");
 }
 
 /**

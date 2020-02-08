@@ -16,10 +16,10 @@ int main()
 	
 	circularListRemoveFront(deque);
 	circularListRemoveBack(deque);
-	circularListPrint(deque);
+//	circularListPrint(deque);
 	
 	circularListReverse(deque);
-	circularListPrint(deque);
+//	circularListPrint(deque);
 	
 	circularListDestroy(deque);
 	

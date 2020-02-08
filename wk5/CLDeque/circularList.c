@@ -1,7 +1,7 @@
 /***********************************************************
-* Author:
-* Email:
-* Date Created:
+* Author: Alvin Johns
+* Email: johnsal@oregonstate.edu
+* Date Created: Feb 7, 2020
 * Filename: circularList.c
 *
 * Overview:
@@ -56,6 +56,12 @@ struct CircularList
 static void init(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	deque->sentinel = (struct Link*)malloc(sizeof(struct Link));
+	assert(deque->sentinel != NULL);
+	deque->sentinel->next = deque->sentinel;
+	deque->sentinel->prev = deque->sentinel;
+	deque->size = 0;
 }
 
 /**
@@ -69,6 +75,12 @@ static void init(struct CircularList* deque)
 static struct Link* createLink(TYPE value)
 {
 	/* FIXME: You will write this function */
+	struct Link *newLink = (struct Link*)malloc(sizeof(struct Link));
+	assert(newLink != NULL);
+	newLink->value = value;
+	newLink->next = NULL;
+	newLink->prev = NULL;
+	return newLink;
 }
 
 /**
@@ -85,6 +97,9 @@ static struct Link* createLink(TYPE value)
 static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE value)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	assert(link != NULL);
+			
 }
 
 /**

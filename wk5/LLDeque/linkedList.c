@@ -97,6 +97,7 @@ static void addLinkBefore(struct LinkedList* list, struct Link* link, TYPE value
 	newLink->value = value;
 	newLink->prev = link->prev;
 	newLink->next = link;
+	link->prev->next = newLink;
 	link->prev = newLink;
 	list->size++;
 }
@@ -116,11 +117,11 @@ static void removeLink(struct LinkedList* list, struct Link* link)
 	/* FIXME: You will write this function */
 	assert(list != NULL);
 	assert(link != NULL);
-	struct Link *temp = link;
+	//struct Link *temp = link;
 	link->prev->next = link->next;
 	link->next->prev = link->prev;
-	free(temp);
-	temp = NULL;
+	free(link);
+	//temp = NULL;
 	list->size--;
 }
 
@@ -172,7 +173,6 @@ void linkedListDestroy(struct LinkedList* list)
 void linkedListAddFront(struct LinkedList* deque, TYPE value)
 {
 	/* FIXME: You will write this function */
-	assert(deque != NULL);
 	addLinkBefore(deque, deque->frontSentinel->next, value);
 }
 
@@ -187,8 +187,7 @@ void linkedListAddFront(struct LinkedList* deque, TYPE value)
 void linkedListAddBack(struct LinkedList* deque, TYPE value)
 {
 	/* FIXME: You will write this function */
-	assert(deque != NULL);
-	addLinkBefore(deque, deque->backSentinel->prev, value);
+	addLinkBefore(deque, deque->backSentinel, value);
 }
 
 /**
@@ -203,8 +202,8 @@ TYPE linkedListFront(struct LinkedList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
-	assert(deque->size > 0);
-	return (deque->frontSentinel->next->value);
+	assert(!linkedListIsEmpty(deque));
+	return deque->frontSentinel->next->value;
 }
 
 /**
@@ -219,8 +218,8 @@ TYPE linkedListBack(struct LinkedList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
-	assert(deque->size > 0);
-	return (deque->backSentinel->prev->value);
+	assert(!linkedListIsEmpty(deque));
+	return deque->backSentinel->prev->value;
 }
 
 /**
@@ -234,7 +233,7 @@ void linkedListRemoveFront(struct LinkedList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
-	assert(deque->size > 0);
+	assert(!linkedListIsEmpty(deque));
 	removeLink(deque, deque->frontSentinel->next);
 }
 
@@ -249,7 +248,7 @@ void linkedListRemoveBack(struct LinkedList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
-	assert(deque->size > 0);
+	assert(!linkedListIsEmpty(deque));
 	removeLink(deque, deque->backSentinel->prev);
 }
 
@@ -282,10 +281,11 @@ void linkedListPrint(struct LinkedList* deque)
 
 	struct Link *curr = deque->frontSentinel->next;
 
-	while (!linkedListIsEmpty(deque)) {
+	while (curr != deque->backSentinel) {
 		printf("%i ", curr->value); 
 		curr = curr->next;
 	}
+	printf("\n");
 }
 
 /**
@@ -301,6 +301,7 @@ void linkedListPrint(struct LinkedList* deque)
 void linkedListAdd(struct LinkedList* bag, TYPE value)
 {
 	/* FIXME: You will write this function */
+	addLinkBefore(bag, bag->frontSentinel->next, value);
 }
 
 /**
@@ -313,8 +314,20 @@ void linkedListAdd(struct LinkedList* bag, TYPE value)
  */
 int linkedListContains(struct LinkedList* bag, TYPE value)
 {
-
 	/* FIXME: You will write this function */
+	assert(bag != NULL);
+	assert(!linkedListIsEmpty(bag));
+
+	struct Link *curr = bag->frontSentinel->next;
+
+	while (curr != bag->backSentinel) {
+		if (curr->value == value) {
+			printf("List contains %i\n", value);
+			return 1; 
+		}
+		curr = curr->next;
+	}
+	return 0;
 }
 
 /**
@@ -328,4 +341,18 @@ int linkedListContains(struct LinkedList* bag, TYPE value)
 void linkedListRemove(struct LinkedList* bag, TYPE value)
 {
 	/* FIXME: You will write this function */
+	assert(bag != NULL);
+	assert(!linkedListIsEmpty(bag));
+
+	struct Link *curr = bag->frontSentinel->next;
+	//struct Link *temp = (struct Link*)malloc(sizeof(struct Link));
+
+	while (curr != bag->backSentinel) {
+		//temp = curr;
+		if (curr->value == value) {
+			removeLink(bag, curr);		
+			break;
+		}
+		curr = curr->next;
+	}
 }

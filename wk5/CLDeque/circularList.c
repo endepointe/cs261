@@ -99,11 +99,18 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
 	assert(link != NULL);
+
 	struct Link *newLink = createLink(value);
-	newLink->next = link->next;
-	newLink->prev = link;
-	link->next = newLink;
-	deque->size++;	
+
+	// Empty deq
+	if (link->prev == deque->sentinel && 
+			link->next == deque->sentinel) {
+		newLink->next = deque->sentinel->next;
+		newLink->prev = deque->sentinel->prev;
+		newLink-> deque->sentinel;
+	}	
+
+	//deque->size++;	
 }
 
 /**
@@ -150,14 +157,11 @@ struct CircularList* circularListCreate()
 void circularListDestroy(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
-	assert(deque != NULL);
-	while (deque->sentinel->next != deque->sentinel->prev) {
-		removeLink(deque, deque->sentinel->next);
-	}
-	free(deque->sentinel);
-	deque->sentinel = NULL;
-	free(deque);
-	deque = NULL;
+	//assert(deque != NULL);
+	//free(deque->sentinel);
+	//deque->sentinel = NULL;
+	//free(deque);
+	//deque = NULL;
 }
 
 /**

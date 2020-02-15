@@ -106,18 +106,13 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 	assert(link != NULL);
 
 	struct Link *newLink = createLink(value);
+	struct Link *temp = newLink;
 
-	if ((link->next==deque->sentinel)&&(link->prev==deque->sentinel)) {
-		link->next = newLink;
-		link->prev = newLink;
-		newLink->next = link;
-		newLink->prev = link;
-	} 
+	newLink->prev = link;
+	newLink->next = link->next;
 
-	if (link == deque->sentinel->prev) {
-		newLink->next = deque->sentinel;
-		newLink->prev = link->prev;	
-	}
+	link->next->prev = newLink;
+	link->next = newLink;
 
 	deque->size++;	
 }
@@ -166,11 +161,11 @@ struct CircularList* circularListCreate()
 void circularListDestroy(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
-	//assert(deque != NULL);
-	//free(deque->sentinel);
-	//deque->sentinel = NULL;
-	//free(deque);
-	//deque = NULL;
+	assert(deque != NULL);
+	free(deque->sentinel);
+	deque->sentinel = NULL;
+	free(deque);
+	deque = NULL;
 }
 
 /**
@@ -299,7 +294,7 @@ void circularListPrint(struct CircularList* deque)
 		printf("\nThe list is empty\n");
 	}
 
-	printf("expect 3 2 1 4 5 6\n");
+	printf("expect 6 5 4 1 2 3\n");
 
 	while (count > 0) {
 		printf("%.2f ", curr->value);

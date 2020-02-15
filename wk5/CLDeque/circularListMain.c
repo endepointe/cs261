@@ -7,16 +7,16 @@ int main()
 	circularListAddBack(deque, (TYPE)1);
 	circularListAddBack(deque, (TYPE)2);
 	circularListAddBack(deque, (TYPE)3);
-	circularListAddFront(deque, (TYPE)4);
-	circularListAddFront(deque, (TYPE)5);
-	circularListAddFront(deque, (TYPE)6);
+	//circularListAddFront(deque, (TYPE)4);
+	//circularListAddFront(deque, (TYPE)5);
+	//circularListAddFront(deque, (TYPE)6);
 	circularListPrint(deque);
 	printf("%g\n", circularListFront(deque));
 	printf("%g\n", circularListBack(deque));
 	
 //	circularListRemoveFront(deque);
 //	circularListRemoveBack(deque);
-	circularListPrint(deque);
+//	circularListPrint(deque);
 	
 //	circularListReverse(deque);
 //	circularListPrint(deque);

@@ -107,13 +107,17 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 
 	struct Link *newLink = createLink(value);
 
-	if (link->next = deque->sentinel) {
-			
+	if (link == deque->sentinel) {
+		link->next = newLink;
+		link->prev = newLink;
+		newLink->next = link;
+		newLink->prev = link;
 	}
-	newLink->prev = link->next;
-	newLink->next = link->prev;
+	
+	newLink->next = link->next;
+	newLink->prev = link->prev;
 	link->next = newLink;
-
+	
 	deque->size++;	
 }
 
@@ -211,7 +215,7 @@ TYPE circularListFront(struct CircularList* deque)
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
 	assert(!circularListIsEmpty(deque));	
-	return deque->sentinel->next->value;
+	return deque->sentinel->prev->value;
 }
 
 /**
@@ -227,7 +231,7 @@ TYPE circularListBack(struct CircularList* deque)
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
 	assert(!circularListIsEmpty(deque));	
-	return deque->sentinel->prev->value;
+	return deque->sentinel->next->value;
 }
 
 /**
@@ -286,17 +290,20 @@ void circularListPrint(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
-	int tick = deque->size;
+
 	struct Link *curr = deque->sentinel->next;
+	int count = deque->size;
 
 	if (circularListIsEmpty(deque)) {
 		printf("\nThe list is empty\n");
 	}
 
-	while (tick > 0) {
+	printf("expect 3 2 1 4 5 6\n");
+
+	while (count > 0) {
 		printf("%.2f ", curr->value);
 		curr = curr->next;
-		tick--;
+		--count;
 	}
 
 	printf("\n");

@@ -57,8 +57,10 @@ static void init(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
+
 	deque->sentinel = (struct Link*)malloc(sizeof(struct Link));
 	assert(deque->sentinel != NULL);
+
 	deque->sentinel->next = deque->sentinel;
 	deque->sentinel->prev = deque->sentinel;
 	deque->size = 0;
@@ -76,10 +78,13 @@ static struct Link* createLink(TYPE value)
 {
 	/* FIXME: You will write this function */
 	struct Link *newLink = (struct Link*)malloc(sizeof(struct Link));
+
 	assert(newLink != NULL);
+
 	newLink->value = value;
 	newLink->next = NULL;
 	newLink->prev = NULL;
+
 	return newLink;
 }
 
@@ -102,15 +107,14 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 
 	struct Link *newLink = createLink(value);
 
-	// Empty deq
-	if (link->prev == deque->sentinel && 
-			link->next == deque->sentinel) {
-		newLink->next = deque->sentinel->next;
-		newLink->prev = deque->sentinel->prev;
-		newLink-> deque->sentinel;
-	}	
+	if (link->next = deque->sentinel) {
+			
+	}
+	newLink->prev = link->next;
+	newLink->next = link->prev;
+	link->next = newLink;
 
-	//deque->size++;	
+	deque->size++;	
 }
 
 /**
@@ -176,7 +180,7 @@ void circularListAddFront(struct CircularList* deque, TYPE value)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
-	addLinkAfter(deque, deque->sentinel->next, value);
+	addLinkAfter(deque, deque->sentinel, value);
 }
 
 /**
@@ -282,16 +286,17 @@ void circularListPrint(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
-
+	int tick = deque->size;
 	struct Link *curr = deque->sentinel->next;
 
 	if (circularListIsEmpty(deque)) {
 		printf("\nThe list is empty\n");
 	}
 
-	while (curr != deque->sentinel) {
+	while (tick > 0) {
 		printf("%.2f ", curr->value);
 		curr = curr->next;
+		tick--;
 	}
 
 	printf("\n");

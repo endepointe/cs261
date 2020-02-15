@@ -107,17 +107,18 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 
 	struct Link *newLink = createLink(value);
 
-	if (link == deque->sentinel) {
+	if ((link->next==deque->sentinel)&&(link->prev==deque->sentinel)) {
 		link->next = newLink;
 		link->prev = newLink;
 		newLink->next = link;
 		newLink->prev = link;
+	} 
+
+	if (link == deque->sentinel->prev) {
+		newLink->next = deque->sentinel;
+		newLink->prev = link->prev;	
 	}
-	
-	newLink->next = link->next;
-	newLink->prev = link->prev;
-	link->next = newLink;
-	
+
 	deque->size++;	
 }
 

@@ -106,7 +106,6 @@ static void addLinkAfter(struct CircularList* deque, struct Link* link, TYPE val
 	assert(link != NULL);
 
 	struct Link *newLink = createLink(value);
-	struct Link *temp = newLink;
 
 	newLink->prev = link;
 	newLink->next = link->next;
@@ -162,6 +161,17 @@ void circularListDestroy(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
+	int i = deque->size;
+	struct Link *temp = deque->sentinel->next;
+	struct Link *del = NULL;
+
+	while (i > 0) {
+		del = temp;	
+		del = 0;
+		temp = temp->next;
+		i--;
+	}
+
 	free(deque->sentinel);
 	deque->sentinel = NULL;
 	free(deque);
@@ -288,18 +298,16 @@ void circularListPrint(struct CircularList* deque)
 	assert(deque != NULL);
 
 	struct Link *curr = deque->sentinel->next;
-	int count = deque->size;
+	int i = deque->size;
 
 	if (circularListIsEmpty(deque)) {
 		printf("\nThe list is empty\n");
 	}
 
-	printf("expect 6 5 4 1 2 3\n");
-
-	while (count > 0) {
+	while (i > 0) {
 		printf("%.2f ", curr->value);
 		curr = curr->next;
-		--count;
+		i--;
 	}
 
 	printf("\n");
@@ -307,10 +315,19 @@ void circularListPrint(struct CircularList* deque)
 
 /**
 	Reverses the deque in place without allocating any new memory.
-	The process works as follows: current starts pointing to sentinel;
-	tmp points to current's next, current's next points to current's prev,
-	current's prev is assigned to tmp and current points to current's next
-	(which points to current's prev), so you proceed stepping back through
+	The process works as follows: 
+	
+	current starts pointing to sentinel;
+	
+	tmp points to current's next
+	
+	current's next points to current's prev
+
+	current's prev is assigned to tmp 
+		and current points to current's next
+		(which points to current's prev)
+	
+	so you proceed stepping back through
 	the deque, assigning current's next to current's prev, until current
 	points to the sentinel then you know the each link has been looked at
 	and the link order reversed.
@@ -322,4 +339,20 @@ void circularListPrint(struct CircularList* deque)
 void circularListReverse(struct CircularList* deque)
 {
 	/* FIXME: You will write this function */
+	assert(deque != NULL);
+	assert(!circularListIsEmpty(deque));
+
+	struct Link *curr = deque->sentinel;
+	struct Link *temp = curr->next;
+	int i = deque->size;
+
+	while (i > 0) {
+		
+		curr->next = curr->prev;
+		temp = curr->prev;
+		curr = temp;
+
+		i--;
+	}
+	
 }

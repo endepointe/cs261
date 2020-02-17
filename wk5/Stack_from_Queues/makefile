@@ -10,4 +10,4 @@ clean:
 	-rm *.o
 
 cleanall: clean
-	-rm stack_from_queue
+	-rm stack_from_queue *.stackdump

@@ -138,7 +138,8 @@ TYPE listQueueFront(struct Queue* queue)
 {
    	/* FIXME: You will write this function */
 	assert(queue != NULL);
-	assert(!listQueueIsEmpty(queue));
+	assert(queue->head->next != NULL);
+	//assert(!listQueueIsEmpty(queue));
 	return queue->head->next->value;	
 }
 
@@ -393,7 +394,7 @@ int main()
 	assertTrue(listStackTop(s) == 4, "top val == 4\t");
 	assertTrue(listStackPop(s) == 4, "popping; val == 4");
 	assertTrue(listStackIsEmpty(s) == 1, "stackIsEmpty == 1");
-	// listStackPop(s); 	// should fail assert
+	//listStackPop(s); 	// should fail assert
 	// listStackTop(s); 	// should fail assert
 
 	printf("\npushing 0-9...\n");

@@ -167,7 +167,7 @@ void circularListDestroy(struct CircularList* deque)
 
 	while (i > 0) {
 		del = temp;	
-		del = 0;
+		free(del);
 		temp = temp->next;
 		i--;
 	}
@@ -221,7 +221,7 @@ TYPE circularListFront(struct CircularList* deque)
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
 	assert(!circularListIsEmpty(deque));	
-	return deque->sentinel->prev->value;
+	return deque->sentinel->next->value;
 }
 
 /**
@@ -237,7 +237,7 @@ TYPE circularListBack(struct CircularList* deque)
 	/* FIXME: You will write this function */
 	assert(deque != NULL);
 	assert(!circularListIsEmpty(deque));	
-	return deque->sentinel->next->value;
+	return deque->sentinel->prev->value;
 }
 
 /**

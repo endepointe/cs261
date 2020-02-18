@@ -117,11 +117,9 @@ static void removeLink(struct LinkedList* list, struct Link* link)
 	/* FIXME: You will write this function */
 	assert(list != NULL);
 	assert(link != NULL);
-	//struct Link *temp = link;
 	link->prev->next = link->next;
 	link->next->prev = link->prev;
 	free(link);
-	//temp = NULL;
 	list->size--;
 }
 

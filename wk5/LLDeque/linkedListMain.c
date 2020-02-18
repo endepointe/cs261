@@ -22,13 +22,9 @@ int main(){
 	
         struct LinkedList* k = linkedListCreate(); 
         linkedListAdd (k, (TYPE)10);
-        linkedListAdd (k, (TYPE)11);
         linkedListAdd (k, (TYPE)13);
        	linkedListAdd(k, (TYPE)14);
 	linkedListPrint(k);
-	printf("%i\n",linkedListContains(k, (TYPE)3));
-       	linkedListRemove(k, (TYPE)11);
-        linkedListPrint(k);
         linkedListDestroy(k);
 
 	return 0;

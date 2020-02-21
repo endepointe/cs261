@@ -1,7 +1,7 @@
 /***********************************************************
-* Author:
-* Email: 
-* Date Created: 
+* Author: Alvin Johns
+* Email: johnsal@oregonstate.edu
+* Date Created: Feb 15, 2020
 * Filename: bst.c
 *
 * Solution description: Implementation of a Binary Search Tree 
@@ -55,8 +55,7 @@ void initBSTree(struct BSTree *tree)
 
 struct BSTree*  newBSTree()
 {
-	struct BSTree *tree = (struct BSTree *)malloc(sizeof(struct 
-BSTree));
+	struct BSTree *tree = (struct BSTree *)malloc(sizeof(struct BSTree));
 	assert(tree != 0);
 
 	initBSTree(tree);
@@ -140,7 +139,23 @@ int sizeBSTree(struct BSTree *tree) { return tree->cnt; }
 struct Node *_addNode(struct Node *cur, TYPE val)
 {
     /*write this*/
-    return NULL;
+	struct Node *newNode; 
+	if (cur == NULL) {
+		// create new node Land return the value
+		newNode = malloc(sizeof(Node));
+		assert(newNode != NULL);
+		newNode-val = val;
+		newNode->left = NULL;
+		newNode->right = NULL;
+		return cur->val;
+	}	
+
+	if (val < cur->value) {
+		cur->left = _addNode(cur->left, val);
+	} else if (cur->val > val) {
+		cur->right = _addNode(cur->right, val);
+	}
+    	return cur;
 }
 
 /*
@@ -190,6 +205,7 @@ int containsBSTree(struct BSTree *tree, TYPE val)
 TYPE _leftMost(struct Node *cur)
 {
     /*write this*/
+	
     return NULL;
 }
 
@@ -222,9 +238,21 @@ struct Node *_removeLeftMost(struct Node *cur)
 /*----------------------------------------------------------------------------*/
 struct Node *_removeNode(struct Node *cur, TYPE val)
 {
-    /*write this*/
-    return NULL;
-
+    	/*write this*/
+	if (val == cur->val) {
+		if (cur->right == NULL) {
+			return cur->left;
+		} else {
+			cur->val == cur->right->value;
+			cur->right = _removeLeftMost(cur);
+		}
+		if (val < cur->val) {
+			cur->left = removeNode(cur->left, val);
+		} else {
+			cur->right = removeNode(cur->right, val);
+		}
+	}
+	return cur;
 }
 /*
  function to remove a value from the binary search tree

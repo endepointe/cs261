@@ -26,6 +26,20 @@
 int compare(TYPE left, TYPE right)
 {
     /*FIXME: write this*/
+
+	struct data* dataLeft;
+	struct data* dataRight;
+	dataLeft = (struct data*)left;
+	dataRight = (struct data*)right;
+
+	if (dataLeft->val < dataRight->val) {
+		return -1;	
+	} 
+
+	if (dataLeft->val > dataRight->val) {
+		return 1;	
+	} 
+	
 	return 0;
 
 }

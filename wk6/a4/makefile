@@ -13,3 +13,4 @@ clean:
 	rm bst.o
 	rm compare.o
 	rm prog
+	rm prog.exe.stackdump

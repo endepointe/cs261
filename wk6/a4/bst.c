@@ -7,10 +7,6 @@
 * Solution description: Implementation of a Binary Search Tree 
 * that can store any arbitrary struct in its nodes.
 ************************************************************/
- 
-
-
-
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -18,6 +14,7 @@
 #include <string.h>
 #include "bst.h"
 #include "structs.h"
+//#include "compare.c"
 
 struct Node {
 	TYPE         val;
@@ -53,7 +50,7 @@ void initBSTree(struct BSTree *tree)
 	tree->root = 0;
  */
 
-struct BSTree*  newBSTree()
+struct BSTree* newBSTree()
 {
 	struct BSTree *tree = (struct BSTree *)malloc(sizeof(struct BSTree));
 	assert(tree != 0);
@@ -90,7 +87,7 @@ void _freeBST(struct Node *node)
  */
 void clearBSTree(struct BSTree *tree)
 {
-    if ( tree->root != 0) {
+    if (tree->root != 0) {
 	_freeBST(tree->root);
 	tree->root = 0;
     }
@@ -138,23 +135,30 @@ int sizeBSTree(struct BSTree *tree) { return tree->cnt; }
  */
 struct Node *_addNode(struct Node *cur, TYPE val)
 {
-    /*write this*/
+    	/*write this*/
+	assert(val != NULL);
 	struct Node *newNode; 
+
 	if (cur == NULL) {
-		// create new node Land return the value
-		newNode = malloc(sizeof(Node));
+		newNode = (struct Node*)malloc(sizeof(struct Node));
 		assert(newNode != NULL);
-		newNode-val = val;
-		newNode->left = NULL;
-		newNode->right = NULL;
-		return cur->val;
+
+		newNode->val = val;
+		newNode->left = newNode->right = NULL;
+
+		return newNode;
 	}	
 
-	if (val < cur->value) {
+	if (compare(val, cur->val) < 0) {
+
 		cur->left = _addNode(cur->left, val);
-	} else if (cur->val > val) {
+
+	} else if (compare(val, cur->val) > 0) {
+
 		cur->right = _addNode(cur->right, val);
+
 	}
+
     	return cur;
 }
 
@@ -205,8 +209,11 @@ int containsBSTree(struct BSTree *tree, TYPE val)
 TYPE _leftMost(struct Node *cur)
 {
     /*write this*/
-	
-    return NULL;
+	assert(cur != NULL);
+	while (cur->left != NULL) {
+		cur->left = cur->left->left;
+	}	
+    	return cur;
 }
 
 
@@ -239,20 +246,7 @@ struct Node *_removeLeftMost(struct Node *cur)
 struct Node *_removeNode(struct Node *cur, TYPE val)
 {
     	/*write this*/
-	if (val == cur->val) {
-		if (cur->right == NULL) {
-			return cur->left;
-		} else {
-			cur->val == cur->right->value;
-			cur->right = _removeLeftMost(cur);
-		}
-		if (val < cur->val) {
-			cur->left = removeNode(cur->left, val);
-		} else {
-			cur->right = removeNode(cur->right, val);
-		}
-	}
-	return cur;
+	return NULL;
 }
 /*
  function to remove a value from the binary search tree
@@ -545,7 +539,7 @@ int main(int argc, char *argv[]){
    /* After implementing your code, you must uncomment the following calls to the test functions and test your code. Otherwise, you will not receive any 
 points */
 
-  	//testAddNode();
+  	testAddNode();
 	
 	printf("\n");
   	//testContainsBSTree();

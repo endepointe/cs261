@@ -256,8 +256,48 @@ Note:  If you do this iteratively, the above hint does not apply.
 struct Node *_removeLeftMost(struct Node *cur)
 {
     	/*write this*/
-	assert(cur != NULL);	
+	assert(cur != NULL);
 	struct Node *curr = cur;
+	struct Node *right = NULL;
+
+/*				
+					10
+				      /    \
+				     5      15
+				   /  \    /  \
+				  1    7  12   19
+				      / \				 / 
+				     6   9
+				     
+					10
+				      /    \
+				     5      15
+				   /  \    /  \
+				  1    7  12   19
+				         /  \                             /				       
+				      null   14 
+				
+					10
+				      /    \
+				     5      15
+				   /  \    /  \
+				  1    7  12   19
+				         /  \                             /				       
+				        11   14 
+					    /  \
+					  13   null 
+
+*/
+
+	if (curr->left == NULL) {
+		right = curr->right;
+		free(curr);
+		return right;
+	} else {
+		curr->left = _removeLeftMost(curr->left);
+		return curr;
+	}
+
 }
 /*
  recursive helper function to remove a node from the tree
@@ -272,8 +312,28 @@ struct Node *_removeNode(struct Node *cur, TYPE val)
 {
     	/*write this*/
 	assert(cur != NULL);
+	assert(val != NULL);
 
-	return NULL;
+	struct Node *curr = cur;
+	struct Node *temp = NULL;
+
+	if (compare(val, curr->val) == 0) {
+		if (curr->right == NULL) {
+			temp = curr->left;
+			free(curr);
+			return temp;
+		} else {
+			curr->val = _leftMost(curr->right);
+			curr->right = _removeLeftMost(curr->right);
+		}
+	} else if (compare(val, curr->val) < 0) {
+		curr->left = _removeNode(curr->left, val);	
+			
+	} else if (compare(val, curr->val) > 0) {
+		curr->right = _removeNode(curr->right, val);
+	}
+
+	return curr;
 }
 /*
  function to remove a value from the binary search tree
@@ -578,7 +638,7 @@ points */
     	testRemoveLeftMost();
 	
 	printf("\n");
-    //testRemoveNode();
+        testRemoveNode();
     
 	
 	return 0;

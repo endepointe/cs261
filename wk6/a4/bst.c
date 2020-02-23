@@ -193,8 +193,27 @@ element
 /*----------------------------------------------------------------------------*/
 int containsBSTree(struct BSTree *tree, TYPE val)
 {
-    /*write this*/
-    return 0;
+    	/*write this*/
+	assert(tree != NULL);
+	struct Node *curr = tree->root;
+
+	while (curr != NULL) {
+
+		if (curr->val == val) {
+			return 1; 
+		}
+		
+		if (compare(val, curr->val) < 0) {
+				
+			curr = curr->left;	
+			
+		} else if (compare(val, curr->val) > 0) {
+
+			curr = curr->right;
+		}
+	}	
+
+    	return 0;
 }
 
 /*
@@ -208,12 +227,17 @@ int containsBSTree(struct BSTree *tree, TYPE val)
 /*----------------------------------------------------------------------------*/
 TYPE _leftMost(struct Node *cur)
 {
-    /*write this*/
+    	/*write this*/
 	assert(cur != NULL);
-	while (cur->left != NULL) {
-		cur->left = cur->left->left;
+	struct data *dataLeft = (struct data*)cur;
+	struct Node *curr = cur;
+
+	while (curr != NULL) {
+		dataLeft = curr->val;
+		curr = curr->left;
 	}	
-    	return cur;
+
+    	return dataLeft;
 }
 
 
@@ -231,8 +255,9 @@ Note:  If you do this iteratively, the above hint does not apply.
 /*----------------------------------------------------------------------------*/
 struct Node *_removeLeftMost(struct Node *cur)
 {
-    /*write this*/
-    return NULL;
+    	/*write this*/
+	assert(cur != NULL);	
+	struct Node *curr = cur;
 }
 /*
  recursive helper function to remove a node from the tree
@@ -246,6 +271,8 @@ struct Node *_removeLeftMost(struct Node *cur)
 struct Node *_removeNode(struct Node *cur, TYPE val)
 {
     	/*write this*/
+	assert(cur != NULL);
+
 	return NULL;
 }
 /*
@@ -542,13 +569,13 @@ points */
   	testAddNode();
 	
 	printf("\n");
-  	//testContainsBSTree();
+  	testContainsBSTree();
 	
 	printf("\n");
-       //testLeftMost();
+        testLeftMost();
 	
 	printf("\n");
-    //testRemoveLeftMost();
+    	testRemoveLeftMost();
 	
 	printf("\n");
     //testRemoveNode();

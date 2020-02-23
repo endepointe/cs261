@@ -236,6 +236,8 @@ TYPE _leftMost(struct Node *cur)
 		dataLeft = curr->val;
 		curr = curr->left;
 	}	
+	
+	print_type(dataLeft);
 
     	return dataLeft;
 }
@@ -410,7 +412,7 @@ struct TestValues* createValues()
     initValue(&(values->values[1]), 13, "lefty");
     initValue(&(values->values[2]), 110, "righty");
     initValue(&(values->values[3]), 10, "lefty of lefty");
-    
+     
     return values;
 }
 
@@ -639,7 +641,10 @@ points */
 	
 	printf("\n");
         testRemoveNode();
-    
+   
+        testRemoveNode();
+   
+       		
 	
 	return 0;
 

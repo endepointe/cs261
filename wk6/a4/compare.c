@@ -50,8 +50,10 @@ int compare(TYPE left, TYPE right)
 void print_type(TYPE curval)
 {
     	/*FIXME: write this*/
-	//struct data* dataType;
-	//dataType = (struct data*)curval;
+	struct data* dataType;
+	dataType = (struct data*)curval;
+	printf("\nprint_type prints:     ");
+	printf("%i\n", dataType->number);	
 }
 
 

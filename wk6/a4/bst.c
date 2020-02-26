@@ -629,19 +629,26 @@ int main(int argc, char *argv[]){
 points */
 
   	testAddNode();
-	
+	testAddNode();		
 	printf("\n");
+
   	testContainsBSTree();
+	testContainsBSTree();
 	
 	printf("\n");
         testLeftMost();
-	
+	testLeftMost();
+
 	printf("\n");
     	testRemoveLeftMost();
+	testRemoveLeftMost();
 	
+
 	printf("\n");
         testRemoveNode();
+   	testRemoveNode();
    
+
         testRemoveNode();
    
        		

@@ -14,22 +14,34 @@
 
 int hashFunction1(const char* key)
 {
-    int r = 0;
-    for (int i = 0; key[i] != '\0'; i++)
-    {
-        r += key[i];
-    }
-    return r;
+	int r = 0;
+	int len = 0;
+    	
+	for (int i = 0; key[i] != '\0'; i++)
+    	{
+		len++;
+        	r += len * key[i];
+    	}
+	
+	r *= 10;
+	r += len;
+
+    	return r;
 }
 
 int hashFunction2(const char* key)
 {
-    int r = 0;
-    for (int i = 0; key[i] != '\0'; i++)
-    {
-        r += (i + 1) * key[i];
-    }
-    return r;
+	int r = 0;
+    	
+	for (int i = 1; i <= 3; i++)
+    	{
+        	r += i * key[i];
+    	}
+	
+	r *= 10;
+	r += strlen(key);
+
+    	return r;
 }
 
 /**
@@ -159,6 +171,15 @@ void resizeTable(HashMap* map, int capacity)
 void hashMapPut(HashMap* map, const char* key, int value)
 {
     // FIXME: implement
+	HashLink *hl;
+	if (hashMapContainsKey(map, key)) {
+		hashMapRemove(map, key);
+	}	
+	hl = (HashLink*)malloc(sizeof(HashLink));
+	assert(hl != NULL);
+	hl->key = key;
+	hl->value = value;
+	
 }
 
 /**

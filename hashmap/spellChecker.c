@@ -55,6 +55,12 @@ char* nextWord(FILE* file)
 void loadDictionary(FILE* file, HashMap* map)
 {
     // FIXME: implement
+	assert(map != NULL);
+	//int c;
+	while (fgetc(file) != EOF) {
+		printf("%s\n", nextWord(file));	
+	}
+		
 }
 
 /**
@@ -85,7 +91,12 @@ int main(int argc, const char** argv)
         printf("Enter a word or \"quit\" to quit: ");
         scanf("%s", inputBuffer);
 
+	printf("%i\n", HASH_FUNCTION(inputBuffer));
         // Implement the spell checker code here..
+	printf("%c\n", inputBuffer[0]);
+	printf("%i\n", inputBuffer[0]);
+	printf("%c\n", inputBuffer[0] - 32);
+	printf("%i\n", inputBuffer[0] - 32);
 
         if (strcmp(inputBuffer, "quit") == 0)
         {

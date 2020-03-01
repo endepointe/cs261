@@ -27,3 +27,5 @@ clean :
 	-rm *.o
 	-rm tests
 	-rm spellChecker
+	-rm *.exe.stackdump
+	-rm *.exe

@@ -56,10 +56,11 @@ void loadDictionary(FILE* file, HashMap* map)
 {
     // FIXME: implement
 	assert(map != NULL);
-
+/*
 	while (fgetc(file) != EOF) {
 		printf("%s\n", nextWord(file));	
 	}
+*/
 		
 }
 

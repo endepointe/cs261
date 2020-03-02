@@ -15,32 +15,30 @@
 int hashFunction1(const char* key)
 {
 	int r = 0;
-	int len = 0;
     	
+	int ct = 100000;
+
 	for (int i = 0; key[i] != '\0'; i++)
     	{
-		len++;
-        	r += len * key[i];
+        	r += (i + 1) * key[i];
     	}
-	
-	r *= 10;
-	r += len;
 
-    	return r;
+	r *= 10;
+
+	r += strlen(key);	
+
+    	return r % strlen(key);
 }
 
 int hashFunction2(const char* key)
 {
 	int r = 0;
     	
-	for (int i = 1; i <= 3; i++)
+	for (int i = 0; key[i] != '\0'; i++)
     	{
-        	r += i * key[i];
+        	r += key[i];
     	}
 	
-	r *= 10;
-	r += strlen(key);
-
     	return r;
 }
 

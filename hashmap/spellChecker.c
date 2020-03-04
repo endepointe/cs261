@@ -54,14 +54,9 @@ char* nextWord(FILE* file)
  */
 void loadDictionary(FILE* file, HashMap* map)
 {
-    // FIXME: implement
+    	// FIXME: implement
 	assert(map != NULL);
-/*
-	while (fgetc(file) != EOF) {
-		printf("%s\n", nextWord(file));	
-	}
-*/
-		
+	
 }
 
 /**
@@ -75,33 +70,39 @@ void loadDictionary(FILE* file, HashMap* map)
  */
 int main(int argc, const char** argv)
 {
-    // FIXME: implement
-    HashMap* map = hashMapNew(1000);
+    	// FIXME: implement
+    	HashMap* map = hashMapNew(1000);
 
-    FILE* file = fopen("dictionary.txt", "r");
-    clock_t timer = clock();
-    loadDictionary(file, map);
-    timer = clock() - timer;
-    printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
-    fclose(file);
+   	FILE* file = fopen("dictionary.txt", "r");
+	assert(file != NULL);
+    	clock_t timer = clock();
+    	loadDictionary(file, map);
+    	timer = clock() - timer;
+    	printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
+    	fclose(file);
 
-    char inputBuffer[256];
-    int quit = 0;
-    while (!quit)
-    {
-        printf("Enter a word or \"quit\" to quit: ");
-        scanf("%s", inputBuffer);
+    	char inputBuffer[256];
+    	int quit = 0;
+    	while (!quit)
+    	{
+        	printf("Enter a word or \"quit\" to quit: ");
+        	scanf("%s", inputBuffer);
 
-	printf("%i\n", HASH_FUNCTION(inputBuffer));
+		for (int i = 0; i < strlen(inputBuffer); ++i) {
+			inputBuffer[i] = tolower(inputBuffer[i]);
+		}
 
-        // Implement the spell checker code here..
-	
-        if (strcmp(inputBuffer, "quit") == 0)
-        {
-            quit = 1;
-        }
-    }
+		printf("%i\n", HASH_FUNCTION(inputBuffer));
 
-    hashMapDelete(map);
-    return 0;
+        	// Implement the spell checker code here..
+			
+        	if (strcmp(tolower(inputBuffer), "quit") == 0)
+        	{
+            		quit = 1;
+        	}
+   	}
+
+    	hashMapDelete(map);
+
+    	return 0;
 }

@@ -14,20 +14,17 @@
 
 int hashFunction1(const char* key)
 {
-	int r = 0;
-    	
-	int ct = 100000;
+   	int ordinal = 0;
+	int value = 0;	
 
 	for (int i = 0; key[i] != '\0'; i++)
     	{
-        	r += (i + 1) * key[i];
+		ordinal = tolower(key[i] - 96);
+		value += ((i + 1) * ordinal);
+		printf("(%i + %i) ", ordinal, i+1);
     	}
 
-	r *= 10;
-
-	r += strlen(key);	
-
-    	return r % strlen(key);
+    	return 109582 % value;
 }
 
 int hashFunction2(const char* key)

@@ -17,9 +17,11 @@ char* nextWord(FILE* file)
     int maxLength = 16;
     int length = 0;
     char* word = malloc(sizeof(char) * maxLength);
+
     while (1)
     {
-        char c = fgetc(file);
+       	int c = fgetc(file);
+
         if ((c >= '0' && c <= '9') ||
             (c >= 'A' && c <= 'Z') ||
             (c >= 'a' && c <= 'z') ||
@@ -56,7 +58,16 @@ void loadDictionary(FILE* file, HashMap* map)
 {
     	// FIXME: implement
 	assert(map != NULL);
-	
+	char *str = nextWord(file);
+	//printf("%s \n", str);
+
+	while (str) {
+		hashMapPut(map, str, 1);
+		free(str);
+		str = nextWord(file);
+	}
+
+	free(str);
 }
 
 /**
@@ -77,9 +88,12 @@ int main(int argc, const char** argv)
 	assert(file != NULL);
     	clock_t timer = clock();
     	loadDictionary(file, map);
+	//hashMapPrint(map);
     	timer = clock() - timer;
     	printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
     	fclose(file);
+
+	//hashMapPrint(map);
 
     	char inputBuffer[256];
     	int quit = 0;
@@ -96,7 +110,7 @@ int main(int argc, const char** argv)
 
         	// Implement the spell checker code here..
 			
-        	if (strcmp(tolower(inputBuffer), "quit") == 0)
+        	if (strcmp(inputBuffer, "quit") == 0)
         	{
             		quit = 1;
         	}

@@ -14,17 +14,16 @@
 
 int hashFunction1(const char* key)
 {
-   	int ordinal = 0;
+   	int ascii = 0;
 	int value = 0;	
 
 	for (int i = 0; key[i] != '\0'; i++)
     	{
-		ordinal = tolower(key[i] - 96);
-		value += ((i + 1) * ordinal);
-		printf("(%i + %i) ", ordinal, i+1);
+		ascii = key[i];
+		value += ((i + 1) * ascii);
     	}
 
-    	return 109582 % value;
+    	return value;
 }
 
 int hashFunction2(const char* key)
@@ -48,12 +47,12 @@ int hashFunction2(const char* key)
  */
 HashLink* hashLinkNew(const char* key, int value, HashLink* next)
 {
-    HashLink* link = malloc(sizeof(HashLink));
-    link->key = malloc(sizeof(char) * (strlen(key) + 1));
-    strcpy(link->key, key);
-    link->value = value;
-    link->next = next;
-    return link;
+    	HashLink* link = malloc(sizeof(HashLink));
+    	link->key = malloc(sizeof(char) * (strlen(key) + 1));
+    	strcpy(link->key, key);
+    	link->value = value;
+    	link->next = next;
+    	return link;
 }
 
 /**
@@ -62,8 +61,8 @@ HashLink* hashLinkNew(const char* key, int value, HashLink* next)
  */
 static void hashLinkDelete(HashLink* link)
 {
-    free(link->key);
-    free(link);
+    	free(link->key);
+    	free(link);
 }
 
 /**
@@ -74,13 +73,13 @@ static void hashLinkDelete(HashLink* link)
  */
 void hashMapInit(HashMap* map, int capacity)
 {
-    map->capacity = capacity;
-    map->size = 0;
-    map->table = malloc(sizeof(HashLink*) * capacity);
-    for (int i = 0; i < capacity; i++)
-    {
-        map->table[i] = NULL;
-    }
+    	map->capacity = capacity;
+    	map->size = 0;
+    	map->table = malloc(sizeof(HashLink*) * capacity);
+    	for (int i = 0; i < capacity; i++)
+    	{
+        	map->table[i] = NULL;
+    	}
 }
 
 /**
@@ -90,7 +89,22 @@ void hashMapInit(HashMap* map, int capacity)
  */
 void hashMapCleanUp(HashMap* map)
 {
-    // FIXME: implement
+    	// FIXME: implement
+	assert(map != NULL);
+	
+	HashLink *curr;
+	HashLink *next;
+
+	for (int i = 0; i < map->capacity; ++i) {
+		curr = map->table[i];
+		while (curr != NULL) {
+			next = curr->next;
+			hashLinkDelete(curr);
+			curr = next;
+		}
+	}
+	free(map->table);
+	map->size = 0;
 }
 
 /**
@@ -101,9 +115,9 @@ void hashMapCleanUp(HashMap* map)
  */
 HashMap* hashMapNew(int capacity)
 {
-    HashMap* map = malloc(sizeof(HashMap));
-    hashMapInit(map, capacity);
-    return map;
+    	HashMap *map = malloc(sizeof(HashMap));
+    	hashMapInit(map, capacity);
+    	return map;
 }
 
 /**
@@ -113,8 +127,8 @@ HashMap* hashMapNew(int capacity)
  */
 void hashMapDelete(HashMap* map)
 {
-    hashMapCleanUp(map);
-    free(map);
+    	hashMapCleanUp(map);
+    	free(map);
 }
 
 /**
@@ -130,8 +144,22 @@ void hashMapDelete(HashMap* map)
  */
 int* hashMapGet(HashMap* map, const char* key)
 {
-    // FIXME: implement
-    return NULL;
+    	// FIXME: implement
+	assert(map != NULL);
+	assert(key != NULL);
+
+	int pos = HASH_FUNCTION(key) % hashMapCapacity(map);
+
+	HashLink *curr = map->table[pos];
+
+	while (curr != NULL) {
+		if (strcmp(curr->key, key) == 0) {
+			return &(curr->value);
+		}
+		curr = curr->next;
+	}
+
+    	return NULL;
 }
 
 /**
@@ -147,7 +175,29 @@ int* hashMapGet(HashMap* map, const char* key)
  */
 void resizeTable(HashMap* map, int capacity)
 {
-    // FIXME: implement
+    	// FIXME: implement
+	assert(map != NULL);
+	int oldCap = hashMapCapacity(map);
+	HashMap *newMap = hashMapNew(capacity);
+
+	for (int i = 0; i < oldCap; ++i) 
+	{
+		HashLink *link = map->table[i];
+
+		while (link) {
+			hashMapPut(newMap, link->key, link->value);
+			link = link->next;
+		}
+	}
+	
+	hashMapCleanUp(map);
+	map->size = newMap->size;
+	map->table = newMap->table;
+	map->capacity = newMap->capacity;
+	
+	newMap->table = NULL;
+	free(newMap);
+
 }
 
 /**
@@ -165,16 +215,36 @@ void resizeTable(HashMap* map, int capacity)
  */
 void hashMapPut(HashMap* map, const char* key, int value)
 {
-    // FIXME: implement
-	HashLink *hl;
-	if (hashMapContainsKey(map, key)) {
-		hashMapRemove(map, key);
+	// FIXME: implement
+	int capacity = hashMapCapacity(map);
+	int pos = HASH_FUNCTION(key) % capacity;
+
+	if (hashMapTableLoad(map) >= MAX_TABLE_LOAD) {
+		resizeTable(map, 2 * capacity);
 	}	
-	hl = (HashLink*)malloc(sizeof(HashLink));
-	assert(hl != NULL);
-	hl->key = key;
-	hl->value = value;
+
+	if (pos < 0) {
+		pos += hashMapCapacity(map);	
+	}	
 	
+	if (hashMapContainsKey(map, key)) {
+		int *val = hashMapGet(map,key);
+		(*val) += value;
+	} else {
+		HashLink *newLink = hashLinkNew(key, value, NULL);
+		assert(newLink != NULL);
+
+		if (map->table[pos] == NULL) {
+			map->table[pos] = newLink;
+		} else {
+			HashLink *link = map->table[pos];
+			while (link->next) {
+				link = link->next;
+			}
+			link->next = newLink;
+		}
+		map->size++;
+	}
 }
 
 /**
@@ -186,7 +256,32 @@ void hashMapPut(HashMap* map, const char* key, int value)
  */
 void hashMapRemove(HashMap* map, const char* key)
 {
-    // FIXME: implement
+    	// FIXME: implement
+	assert(map != NULL);
+	assert(key != NULL);
+
+	int pos = HASH_FUNCTION(key) % hashMapCapacity(map);
+	
+	HashLink *curr = map->table[pos];
+	HashLink *prev = NULL;
+
+	if (curr != NULL) {
+		if (strcmp(curr->key, key) == 0) {
+			map->table[pos] = curr->next;
+		} else {
+			while (strcmp(curr->key, key) == 0) {
+				prev = curr;
+				curr = curr->next;
+			}
+		}
+		if (prev) {
+			prev->next = curr->next;
+		}
+	}
+
+	hashLinkDelete(curr);
+	map->size--;
+
 }
 
 /**
@@ -201,8 +296,26 @@ void hashMapRemove(HashMap* map, const char* key)
  */
 int hashMapContainsKey(HashMap* map, const char* key)
 {
-    // FIXME: implement
-    return 0;
+    	// FIXME: implement
+	assert(map != NULL);
+	assert(key != NULL);
+
+	int capacity = hashMapCapacity(map);
+	int pos = HASH_FUNCTION(key) % capacity;	
+
+	if (pos < 0) {
+		pos += capacity;
+	}
+
+	HashLink *curr = map->table[pos];
+
+	while (curr) {
+		if (strcmp(curr->key, key) == 0) {
+			return (1);
+		}
+		curr = curr->next;
+	}
+    	return 0;
 }
 
 /**
@@ -212,8 +325,9 @@ int hashMapContainsKey(HashMap* map, const char* key)
  */
 int hashMapSize(HashMap* map)
 {
-    // FIXME: implement
-    return 0;
+    	// FIXME: implement
+	assert(map != NULL);
+    	return map->size;
 }
 
 /**
@@ -223,8 +337,9 @@ int hashMapSize(HashMap* map)
  */
 int hashMapCapacity(HashMap* map)
 {
-    // FIXME: implement
-    return 0;
+    	// FIXME: implement
+	assert(map != NULL);
+    	return map->capacity;
 }
 
 /**
@@ -234,8 +349,15 @@ int hashMapCapacity(HashMap* map)
  */
 int hashMapEmptyBuckets(HashMap* map)
 {
-    // FIXME: implement
-    return 0;
+    	// FIXME: implement
+	int noJumper = 0;
+	int cap = hashMapCapacity(map);
+	for (int i = 0; i < cap; ++i) {
+		if (map->table[i] == NULL) {
+			noJumper++;
+		}
+	}
+    	return noJumper;
 }
 
 /**
@@ -248,8 +370,12 @@ int hashMapEmptyBuckets(HashMap* map)
  */
 float hashMapTableLoad(HashMap* map)
 {
-    // FIXME: implement
-    return 0;
+    	// FIXME: implement
+	assert(map != NULL);
+	float size = (float)hashMapSize(map);
+	float cap = (float)hashMapCapacity(map);
+	
+    	return size / cap;
 }
 
 /**
@@ -258,7 +384,17 @@ float hashMapTableLoad(HashMap* map)
  */
 void hashMapPrint(HashMap* map)
 {
-  // FIXME: implement
-
-   
+  	// FIXME: implement
+	int cap = hashMapCapacity(map);
+	for (int i = 0; i < cap; ++i) {
+		HashLink *link = map->table[i];
+		if (link != NULL) {
+			printf("\nBucket %i", i);
+			while (link != NULL) {
+				printf("Key: %s, Value: %i\n", link->key, link->value);
+				link = link->next;
+			}
+		}
+	}
+	printf("\n");
 }

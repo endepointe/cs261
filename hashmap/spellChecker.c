@@ -56,7 +56,7 @@ char* nextWord(FILE* file)
  */
 void loadDictionary(FILE* file, HashMap* map)
 {
-    	// FIXME: implement
+    // FIXME: implement
 	assert(map != NULL);
 	char *str = nextWord(file);
 	//printf("%s \n", str);
@@ -81,42 +81,45 @@ void loadDictionary(FILE* file, HashMap* map)
  */
 int main(int argc, const char** argv)
 {
-    	// FIXME: implement
-    	HashMap* map = hashMapNew(1000);
+    // FIXME: implement
+    HashMap* map = hashMapNew(977);
 
    	FILE* file = fopen("dictionary.txt", "r");
 	assert(file != NULL);
-    	clock_t timer = clock();
-    	loadDictionary(file, map);
+    clock_t timer = clock();
+    loadDictionary(file, map);
 	//hashMapPrint(map);
-    	timer = clock() - timer;
-    	printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
-    	fclose(file);
+    timer = clock() - timer;
+    printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
+    fclose(file);
 
 	//hashMapPrint(map);
 
-    	char inputBuffer[256];
-    	int quit = 0;
-    	while (!quit)
-    	{
-        	printf("Enter a word or \"quit\" to quit: ");
-        	scanf("%s", inputBuffer);
+	printf("%i empty buckets. \n", hashMapEmptyBuckets(map));
+	printf("%f = load factor. \n", hashMapTableLoad(map));
+
+    char inputBuffer[256];
+    int quit = 0;
+    while (!quit)
+    {
+     	printf("Enter a word or \"quit\" to quit: ");
+        scanf("%s", inputBuffer);
 
 		for (int i = 0; i < strlen(inputBuffer); ++i) {
 			inputBuffer[i] = tolower(inputBuffer[i]);
 		}
 
-		printf("%i\n", HASH_FUNCTION(inputBuffer));
+		printf("%i\n", HASH_FUNCTION(inputBuffer) % hashMapCapacity(map) );
 
-        	// Implement the spell checker code here..
+        // Implement the spell checker code here..
 			
-        	if (strcmp(inputBuffer, "quit") == 0)
-        	{
-            		quit = 1;
-        	}
+        if (strcmp(inputBuffer, "quit") == 0)
+        {
+            quit = 1;
+        }
    	}
 
-    	hashMapDelete(map);
+    hashMapDelete(map);
 
-    	return 0;
+    return 0;
 }

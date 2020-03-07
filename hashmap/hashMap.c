@@ -387,7 +387,7 @@ void hashMapPrint(HashMap* map)
 	for (int i = 0; i < cap; ++i) {
 	HashLink *link = map->table[i];
 		if (link != NULL) {
-			printf("\nBucket %i", i);
+			printf("\nBucket: %i, ", i);
 			while (link != NULL) {
 				printf("Key: %s, Value: %i\n", link->key, link->value);
 				link = link->next;

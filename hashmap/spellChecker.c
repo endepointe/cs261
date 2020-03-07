@@ -62,7 +62,7 @@ void loadDictionary(FILE* file, HashMap* map)
 	//printf("%s \n", str);
 
 	while (str) {
-		hashMapPut(map, str, 1);
+		hashMapPut(map, str, HASH_FUNCTION(str));
 		free(str);
 		str = nextWord(file);
 	}
@@ -83,8 +83,9 @@ int main(int argc, const char** argv)
 {
     // FIXME: implement
     HashMap* map = hashMapNew(977);
-
-   	FILE* file = fopen("dictionary.txt", "r");
+	
+	FILE* file = fopen("test.txt", "r");
+   	//FILE* file = fopen("dictionary.txt", "r");
 	assert(file != NULL);
     clock_t timer = clock();
     loadDictionary(file, map);
@@ -93,13 +94,15 @@ int main(int argc, const char** argv)
     printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
     fclose(file);
 
-	//hashMapPrint(map);
+	hashMapPrint(map);
 
 	printf("%i empty buckets. \n", hashMapEmptyBuckets(map));
 	printf("%f = load factor. \n", hashMapTableLoad(map));
 
     char inputBuffer[256];
     int quit = 0;
+	int s;
+
     while (!quit)
     {
      	printf("Enter a word or \"quit\" to quit: ");
@@ -112,7 +115,14 @@ int main(int argc, const char** argv)
 		printf("%i\n", HASH_FUNCTION(inputBuffer) % hashMapCapacity(map) );
 
         // Implement the spell checker code here..
-			
+
+		if (hashMapContainsKey(map, inputBuffer)) {
+			//s = (hashMapGet(map, inputBuffer));
+			s = HASH_FUNCTION(inputBuffer) % hashMapCapacity(map);
+			printf("Dictionary contains key: %i\n", s);	
+			printf("Key: %s\n", map->table[s]->key);
+		}			
+
         if (strcmp(inputBuffer, "quit") == 0)
         {
             quit = 1;

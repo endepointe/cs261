@@ -69,6 +69,7 @@ void loadDictionary(FILE* file, HashMap* map)
 	free(str);
 }
 
+/*
 void spellCheck(const char* key, HashMap *map)
 {
 
@@ -90,6 +91,63 @@ void spellCheck(const char* key, HashMap *map)
 	}
 	printf("printed %i things\n", count);
 }
+*/
+
+/* Checks the distance between the two strings with an internall function
+ * called distance.
+ *
+ * The lower the return value, the greater the similarity between the
+ * two strings.
+ *
+ * @param s1 is the key
+ * @param s2 is the string representing the closet string to the key.
+ * Referenced https://en.wikipedia.org/wiki/Levenshtein_distance
+ */
+int spellCheck(const char *source, const char *target) 
+{
+	int sourceLength = strlen(source);
+	int targetLength = strlen(target);
+
+	int mtx[sourceLength + 1][targetLength + 1];
+
+	// Set each element in matrix, mtx, to zero
+	for (int i = 0; i <= sourceLength; ++i) {
+		for (int j = 0; j <= targetLength; ++j) {
+			mtx[i][j] = -1;
+		}
+	}
+
+	// Get the source prefixes
+	
+	int distance(int i, int j) {
+		if (mtx[i][j] >= 0) { 
+			return mtx[i][j]; 
+		}
+
+		int x;
+
+		if (i == sourceLength) { 
+			x = targetLength - j;
+		} else if (j == targetLength) {
+			x = sourceLength - i;	
+		} else if (source[i] == target[i]) {
+			x = distance(i + 1, j + 1);	
+		} else { 
+			x = distance(i + 1, j + 1);
+
+			int y; 
+
+			if ((y = distance(i, j + 1)) < x) { x = y; }
+			if ((y = distance(i + 1, j)) < x) { x = y; }
+			x++;
+		}
+
+		return mtx[i][j] = x;
+	}
+
+	return distance(0,0);
+}
+
 /**
  * Checks the spelling of the word provded by the user. If the word is spelled incorrectly,
  * print the 5 closest words as determined by a metric like the Levenshtein distance.
@@ -138,7 +196,6 @@ int main(int argc, const char** argv)
         // Implement the spell checker code here..
 
 		if (hashMapContainsKey(map, inputBuffer)) {
-			//s = (hashMapGet(map, inputBuffer));
 			s = HASH_FUNCTION(inputBuffer) % hashMapCapacity(map);
 			link = map->table[s];
 			printf("Dictionary contains key: %i\n", s);	
@@ -152,14 +209,33 @@ int main(int argc, const char** argv)
 			printf("The inputted word ");
 			printf("%s is spelled incorrectly.\n", inputBuffer);
 			printf("Did you mean: \n");
-			spellCheck(inputBuffer, map);
+
+			int count = 0;
+			HashLink *curr;
+
+			for (int i = 0; i < hashMapCapacity(map); ++i) {
+				curr = map->table[i];
+
+				if (curr != NULL) {
+					while (curr) {
+						hashMapPut(map, curr->key, spellCheck(inputBuffer, curr->key));
+						if (count > 5) {
+							break;
+						} else if (spellCheck(inputBuffer, curr->key) == 1 && count < 5) {
+							count++;
+							printf("	- %s\n", curr->key);
+						}
+						curr = curr->next;
+					}
+				}
+			}
 		}			
 
-        if (strcmp(inputBuffer, "quit") == 0)
-        {
-            quit = 1;
-        }
-   	}
+        	if (strcmp(inputBuffer, "quit") == 0)
+        	{
+            		quit = 1;
+        	}
+   }
 
     hashMapDelete(map);
 

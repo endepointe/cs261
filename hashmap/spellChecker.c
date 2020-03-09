@@ -59,7 +59,6 @@ void loadDictionary(FILE* file, HashMap* map)
     // FIXME: implement
 	assert(map != NULL);
 	char *str = nextWord(file);
-	//printf("%s \n", str);
 
 	while (str) {
 		hashMapPut(map, str, HASH_FUNCTION(str));
@@ -70,6 +69,27 @@ void loadDictionary(FILE* file, HashMap* map)
 	free(str);
 }
 
+void spellCheck(const char* key, HashMap *map)
+{
+
+	HashLink *link;
+	char *s;
+	int count = 0;
+
+	for (int i = 0; i < hashMapCapacity(map); ++i) {
+		link = map->table[i];
+		if (link != NULL) {
+			while (link) {
+				count++;
+				if (strcmp(key, link->key) == 0) {
+					printf("Matched key: %s\n", link->key);		
+				}
+				link = link->next;
+			}
+		}
+	}
+	printf("printed %i things\n", count);
+}
 /**
  * Checks the spelling of the word provded by the user. If the word is spelled incorrectly,
  * print the 5 closest words as determined by a metric like the Levenshtein distance.
@@ -84,8 +104,8 @@ int main(int argc, const char** argv)
     // FIXME: implement
     HashMap* map = hashMapNew(977);
 	
-	FILE* file = fopen("test.txt", "r");
-   	//FILE* file = fopen("dictionary.txt", "r");
+	//FILE* file = fopen("test.txt", "r");
+   	FILE* file = fopen("dictionary.txt", "r");
 	assert(file != NULL);
     clock_t timer = clock();
     loadDictionary(file, map);
@@ -94,7 +114,7 @@ int main(int argc, const char** argv)
     printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
     fclose(file);
 
-	hashMapPrint(map);
+	//hashMapPrint(map);
 
 	printf("%i empty buckets. \n", hashMapEmptyBuckets(map));
 	printf("%f = load factor. \n", hashMapTableLoad(map));
@@ -102,6 +122,7 @@ int main(int argc, const char** argv)
     char inputBuffer[256];
     int quit = 0;
 	int s;
+	HashLink *link;
 
     while (!quit)
     {
@@ -119,8 +140,19 @@ int main(int argc, const char** argv)
 		if (hashMapContainsKey(map, inputBuffer)) {
 			//s = (hashMapGet(map, inputBuffer));
 			s = HASH_FUNCTION(inputBuffer) % hashMapCapacity(map);
+			link = map->table[s];
 			printf("Dictionary contains key: %i\n", s);	
 			printf("Key: %s\n", map->table[s]->key);
+			printf("\nValues contained in chain: \n");
+			while (link) {
+				printf("	- %s\n", link->key);
+				link = link->next;
+			}	
+		} else {
+			printf("The inputted word ");
+			printf("%s is spelled incorrectly.\n", inputBuffer);
+			printf("Did you mean: \n");
+			spellCheck(inputBuffer, map);
 		}			
 
         if (strcmp(inputBuffer, "quit") == 0)

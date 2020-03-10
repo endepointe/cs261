@@ -69,38 +69,14 @@ void loadDictionary(FILE* file, HashMap* map)
 	free(str);
 }
 
-/*
-void spellCheck(const char* key, HashMap *map)
-{
-
-	HashLink *link;
-	char *s;
-	int count = 0;
-
-	for (int i = 0; i < hashMapCapacity(map); ++i) {
-		link = map->table[i];
-		if (link != NULL) {
-			while (link) {
-				count++;
-				if (strcmp(key, link->key) == 0) {
-					printf("Matched key: %s\n", link->key);		
-				}
-				link = link->next;
-			}
-		}
-	}
-	printf("printed %i things\n", count);
-}
-*/
-
-/* Checks the distance between the two strings with an internall function
+/* Checks the distance between the two strings with an internal function
  * called distance.
  *
  * The lower the return value, the greater the similarity between the
  * two strings.
  *
  * @param s1 is the key
- * @param s2 is the string representing the closet string to the key.
+ * @param s2 is the string representing the closest string to the key.
  * Referenced https://en.wikipedia.org/wiki/Levenshtein_distance
  */
 int spellCheck(const char *source, const char *target) 
@@ -108,41 +84,37 @@ int spellCheck(const char *source, const char *target)
 	int sourceLength = strlen(source);
 	int targetLength = strlen(target);
 
+	// Holds the distance between the two strings.
 	int mtx[sourceLength + 1][targetLength + 1];
 
 	// Set each element in matrix, mtx, to zero
-	for (int i = 0; i <= sourceLength; ++i) {
-		for (int j = 0; j <= targetLength; ++j) {
-			mtx[i][j] = -1;
+	for (int i = 0; i < sourceLength + 1; ++i) {
+		for (int j = 0; j < targetLength + 1; ++j) {
+			mtx[i][j] = 0;
 		}
 	}
 
-	// Get the source prefixes
-	
 	int distance(int i, int j) {
-		if (mtx[i][j] >= 0) { 
+		if (mtx[i][j] > 0) { 
 			return mtx[i][j]; 
 		}
-
-		int x;
+		
+		int editCost;
 
 		if (i == sourceLength) { 
-			x = targetLength - j;
+			editCost = targetLength - j;
 		} else if (j == targetLength) {
-			x = sourceLength - i;	
+			editCost = sourceLength - i;	
 		} else if (source[i] == target[i]) {
-			x = distance(i + 1, j + 1);	
+			editCost = distance(i + 1, j + 1);	
 		} else { 
-			x = distance(i + 1, j + 1);
-
-			int y; 
-
-			if ((y = distance(i, j + 1)) < x) { x = y; }
-			if ((y = distance(i + 1, j)) < x) { x = y; }
-			x++;
+			editCost = distance(i + 1, j + 1);
+			editCost++; 
 		}
 
-		return mtx[i][j] = x;
+		mtx[i][j] = editCost;
+
+		return mtx[i][j];
 	}
 
 	return distance(0,0);
@@ -167,7 +139,6 @@ int main(int argc, const char** argv)
 	assert(file != NULL);
     clock_t timer = clock();
     loadDictionary(file, map);
-	//hashMapPrint(map);
     timer = clock() - timer;
     printf("Dictionary loaded in %f seconds\n", (float)timer / (float)CLOCKS_PER_SEC);
     fclose(file);
@@ -181,6 +152,7 @@ int main(int argc, const char** argv)
     int quit = 0;
 	int s;
 	HashLink *link;
+	HashLink **arr = malloc(sizeof(char*) * 5);
 
     while (!quit)
     {
@@ -191,51 +163,85 @@ int main(int argc, const char** argv)
 			inputBuffer[i] = tolower(inputBuffer[i]);
 		}
 
-		printf("%i\n", HASH_FUNCTION(inputBuffer) % hashMapCapacity(map) );
-
         // Implement the spell checker code here..
 
 		if (hashMapContainsKey(map, inputBuffer)) {
 			s = HASH_FUNCTION(inputBuffer) % hashMapCapacity(map);
 			link = map->table[s];
-			printf("Dictionary contains key: %i\n", s);	
-			printf("Key: %s\n", map->table[s]->key);
-			printf("\nValues contained in chain: \n");
 			while (link) {
-				printf("	- %s\n", link->key);
+				if (strcmp(inputBuffer, link->key) == 0) {
+					printf("The inputted word '%s' ", link->key);	
+					printf(" is spelled correctly.\n");
+					break;
+				}
 				link = link->next;
 			}	
 		} else {
 			printf("The inputted word ");
 			printf("%s is spelled incorrectly.\n", inputBuffer);
-			printf("Did you mean: \n");
+			printf("Did you mean ______ ? \n");
 
 			int count = 0;
 			HashLink *curr;
 
 			for (int i = 0; i < hashMapCapacity(map); ++i) {
 				curr = map->table[i];
-
 				if (curr != NULL) {
 					while (curr) {
-						hashMapPut(map, curr->key, spellCheck(inputBuffer, curr->key));
+					  hashMapPut(map,curr->key,spellCheck(inputBuffer,curr->key));
 						if (count > 5) {
 							break;
-						} else if (spellCheck(inputBuffer, curr->key) == 1 && count < 5) {
+						} else if (spellCheck(inputBuffer, curr->key) == 1 
+					  	  && count < 5) {
+							arr[count] = malloc(sizeof(char)*strlen(curr->key));
+							arr[count]->key = curr->key;
 							count++;
-							printf("	- %s\n", curr->key);
+						} else if (spellCheck(inputBuffer, curr->key) == 2 
+						  && count < 5) {
+							arr[count] = malloc(sizeof(char)*strlen(curr->key));
+							arr[count]->key = curr->key;
+							count++;
+						} else if (spellCheck(inputBuffer, curr->key) == 3 
+						  && count < 5) {
+							arr[count] = malloc(sizeof(char)*strlen(curr->key));
+							arr[count]->key = curr->key;
+							count++;
+						}/* else if (spellCheck(inputBuffer, curr->key) >= 4
+						  && count < 5) {
+							arr[count] = malloc(sizeof(char)*strlen(curr->key));
+							arr[count]->key = curr->key;
+							count++;
+						} else if (spellCheck(inputBuffer, curr->key) == 5 
+						  && count < 5) {
+							arr[count] = malloc(sizeof(char)*strlen(curr->key));
+							arr[count]->key = curr->key;
+							count++;
 						}
+						*/
 						curr = curr->next;
 					}
 				}
 			}
+		
+			printf("count is %i\n", count);	
+			for (int i = 0; i < 5; i++) {
+				///*
+				if (arr[i] == NULL) {
+					arr[i] = malloc(sizeof(char) * 10);
+					arr[i]->key = "No match\0";	
+				}	
+				//*/
+				printf("	- %s, %i\n", arr[i]->key, arr[i]->value);
+				//free(arr[i]);
+			}
+			free(arr);
 		}			
 
-        	if (strcmp(inputBuffer, "quit") == 0)
-        	{
-            		quit = 1;
-        	}
-   }
+        if (strcmp(inputBuffer, "quit") == 0)
+        {
+            quit = 1;
+        }
+   	}
 
     hashMapDelete(map);
 

@@ -1,7 +1,3 @@
-/*
-	Author: Alvin Johns
-	Program: Spell checker/recommender using levenshtein distance
-*/
 #include "hashMap.h"
 #include <assert.h>
 #include <time.h>
@@ -134,6 +130,7 @@ int main(int argc, const char** argv)
     int quit = 0;
 	int s;
 	HashLink *link;
+	//HashLink **arr = malloc(sizeof(char*) * 5);
 	char **arr = malloc(sizeof(char*) * 5);
 
     while (!quit)
@@ -210,9 +207,6 @@ int main(int argc, const char** argv)
 			for (int i = 0; i < 5; i++) {
 				if (arr[i] != NULL) {
 					printf("	- %s\n", arr[i]);
-				} else { 
-					arr[i] = malloc(sizeof(char)*12);
-					arr[i] = "No Match...";
 				}
 			}
 		}			
@@ -224,10 +218,11 @@ int main(int argc, const char** argv)
    	}
 				
 	for (int i = 0; i < 5; i++) {
-		//if (arr[i] != NULL) {	
+		if (arr[i] != NULL) {	
 			free(arr[i]);
-		//}
+		}
 	}
+
 	free(arr);
 
     hashMapDelete(map);

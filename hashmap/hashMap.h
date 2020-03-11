@@ -8,6 +8,9 @@
 
 #define HASH_FUNCTION hashFunction1
 #define MAX_TABLE_LOAD 0.47
+// Referenced from:
+//		https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#C
+#define MIN3(a,b,c) ((a) < (b) ? ((a) < (c) ? (a) : (c)) : ((b) < (c) ? (b) : (c)))
 
 typedef struct HashMap HashMap;
 typedef struct HashLink HashLink;

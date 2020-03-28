@@ -1,8 +1,5 @@
 /***********************************************************
-* Author: Alvin Johns
-* Email: johnsal@oregonstate.edu
-* Date Created: Feb 15, 2020
-* Filename: stack_from_queue.c
+* 
 *
 * Overview:
 *   This program is an implementation of a stack using two

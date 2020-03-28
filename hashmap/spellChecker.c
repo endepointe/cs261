@@ -1,7 +1,4 @@
-/*
-	Author: Alvin Johns
-	Program: Spell checker/recommender using levenshtein distance
-*/
+
 #include "hashMap.h"
 #include <assert.h>
 #include <time.h>

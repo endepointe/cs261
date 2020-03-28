@@ -1,10 +1,4 @@
-/*******
- * CS261: Assignment 1 - Q.1
- * Name: Alvin Johns
- * Date: 01/13/20
- * Solution Desc: Demonstration file to display how create and
- * 	manipulate a block of memory 
- * */
+
 
 #include <stdio.h>
 #include <stdlib.h>

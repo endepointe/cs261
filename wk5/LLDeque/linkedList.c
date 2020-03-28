@@ -1,8 +1,5 @@
 /***********************************************************
-* Author: Alvin Johns	
-* Email: johnsal@oregonstate.edu
-* Date Created: Feb 6, 2020
-* Filename: linkedList.c
+*
 *
 * Overview:
 *   This program is a linked list implementation of the deque

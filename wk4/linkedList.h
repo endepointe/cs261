@@ -1,9 +1,4 @@
-/* Worksheet 22: Constructing a Bag using a Linked List 
- * Author: Alvin Johns
- * Date: January 29, 2019
- * Desc: Construct a bag using a linked list.
- *	
- *	*/
+
 
 #include <stdio.h>
 #include <stdlib.h>

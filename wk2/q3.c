@@ -1,14 +1,4 @@
-/*******
- * CS261: Assignment 1 - Q.3
- * Name: Alvin Johns
- * Date: 01/18/20
- * Solution Desc: Demonstrate how to manipulate a string of alphanumeric
- * 	letters to form a camelCase output
- *
- * 	lower case is from 97 to 122
- * 	upper case is from 65 to 90
- *
- * */
+
 
 #include <stdio.h>
 #include <stdlib.h>

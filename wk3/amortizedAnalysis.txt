@@ -1,8 +1,4 @@
-/*
-	Author: Alvin Johns
-	Date: January 29, 2020
-	Desc: Answers to assignment 2
-*/
+
 
 1) 	How many cost units are spent in the entire process of performing
 	50 consecutive push operations on an empty array which starts out

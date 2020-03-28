@@ -1,8 +1,4 @@
-/*	dynamicArray.c: Dynamic Array implementation.
- * Author: Alvin Johns
- * Date: January 29, 2020
- * Desc: Implementation of a stack using a dynamic array
- * */
+
 #include <assert.h>
 #include <stdlib.h>
 #include "dynArray.h"

@@ -1,8 +1,5 @@
 /***********************************************************
-* Author: Alvin Johns
-* Email: johnsal@oregonstate.edu
-* Date Created: Feb 15, 2020
-* Filename: bst.c
+*
 *
 * Solution description: Implementation of a Binary Search Tree 
 * that can store any arbitrary struct in its nodes.

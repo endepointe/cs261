@@ -1,8 +1,4 @@
 /***********************************************************
-* Author: Alvin Johns
-* Email: johnsal@oregonstate.edu
-* Date Created: Feb 7, 2020
-* Filename: circularList.c
 *
 * Overview:
 *   This program is a circular doubly linked list implementation

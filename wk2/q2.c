@@ -1,9 +1,4 @@
-/*******
- * CS261: Assignment 1 - Q.2
- * Name: Alvin Johns
- * Date: 01/18/20
- * Solution Desc: Demonstration file to display how swap pointer values 
- * */
+
 
 #include <stdio.h>
 #include <stdlib.h>
